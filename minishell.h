@@ -38,6 +38,16 @@ typedef struct 		s_args
 	struct s_args	*next;			// указатель на следующий элемент
 	struct s_args	*prev;			// указатель на предыдущий элемент
 }					t_args;
+/*
+typedef struct		s_args
+{
+	char			**args;
+	int				in_pipe;
+	int				out_pipe;
+	struct s_args	*next;
+	int				next_type;
+}					t_args;
+*/
 
 void	parse_line(t_args *args, char *line);
 void	execute_command(t_args *args);

@@ -17,9 +17,86 @@
 void	args_init(t_args *args)
 {
 	args->n_flag = 0;
+	
 }
 
 void	parse_line(t_args *args, char *line)
 {
 	args_init(args);
 }
+/*
+t_args	*parse_line(char *line, t_args *args)
+{
+	int		i;
+	int		j;
+	int		index;
+	char	c;
+	t_args	a;
+	
+	a = args;
+	i = 0;
+	j = 0;
+	index = 0;
+	while (line[++i] != '\0')
+	{
+		c = line[i];
+		if (c == '|' && line[i - 1] != '\\')
+		{
+			a->line = ft_substr(line, j, i - j);
+			j = i + 1;
+			a = a->next;
+			a = ft_calloc()
+
+
+		}
+			
+	}
+}
+t_args	*_parse_line(char *line, t_args *args)
+{
+	char	**av;
+	int		i;
+	int		j;
+	int		index;
+
+	av = args->args;
+//	while (ft_isspace(*line))
+//		line++;
+	i = -1;
+	j = 0;
+	index = 0;
+	while (line[++i] != '\0')
+	{
+		av[index] = NULL;
+		while (ft_isspace(line[i]) && line[i] != '\0')
+			++i;
+		j = i;
+		while (!ft_isspace(line[i]) && line[i] != '\0')
+			++i;
+		av[index++] = ft_substr(line, j, i - j);
+		av[index] = NULL;
+	}
+}
+*/
+
+t_args	*parse_line1(char *line, t_args *args)
+{
+	int		i;
+	int		j;
+	char	c;
+	int		a;
+	int		b;
+
+	i = -1;
+	a = 0;
+	b = 0;
+	while (line[++i] != '\0')
+	{
+		if (line[i] == '\"')
+		{
+			a++;
+			printf("%d\n", i);
+		}
+	}
+}
+
