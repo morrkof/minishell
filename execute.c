@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/20 16:32:48 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/11/23 18:26:36 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@ void	ft_echo(char **args, int flag)
 		write(1, "\n", 1);
 }
 
+void	ft_pwd()
+{
+	char *buf;
+
+	buf = getcwd(NULL, 0);
+	write (1, buf, ft_strlen(buf));
+	write(1, "\n", 1);
+	free(buf);
+}
+
 void	execute_command(char *line)
 {
 	char *args[] = {"Hello, world!", "Blablabla", "ololo", NULL};
@@ -42,7 +52,7 @@ void	execute_command(char *line)
 	if (!(ft_strncmp(line, "echo", 4)))
 		ft_echo(args, flag_n);
 	else if (!(ft_strncmp(line, "pwd", 3)))
-		printf("check pwd\n");
+		ft_pwd();
 	else if (!(ft_strncmp(line, "cd", 2)))
 		printf("check cd\n");
 	else if (!(ft_strncmp(line, "export", 6)))
