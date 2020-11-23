@@ -47,8 +47,9 @@ void	args_init(t_args *args)
 	args->flag_in_pipe = 0;
 	args->next = NULL;
 	args->prev = NULL;
-	args->arg = NULL;
 	args->red = NULL;
+	args->arg = malloc(sizeof(char *) * 100);
+	args->arg[0] = NULL;
 }
 
 char	*msh_substr(char *s, unsigned int start, size_t len)
@@ -56,42 +57,53 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	char	*substr;
 	size_t	i;
 	char	c;
+	size_t	j;
 
-	if (start >= ft_strlen(s))//
+	if (len == 0)
 		return NULL;
 	if (!(substr = (char *)malloc(len + 1)))
 		return (NULL);
 	i = 0;
-	while (i < len && s[start] != '\0')
+	j = 0;
+	while (j++ < len && s[start] != '\0')
 	{
 		c = s[start];
 		if (c != '\'' && c != '\"')
 		{
-			substr[i] = c;	
-			i++;
+			substr[i++] = c;	
 		}
 		start++;
 	}
 	substr[i] = '\0';
-	return (substr);
+	if (substr[0] != '\0')
+		return (substr);
+	free(substr);
+	return NULL;
+}
+
+char	**add_arg(char *s, int *i, int *arg_start, char **arr)
+{
+	*arr = msh_substr(s, *arg_start, *i - *arg_start);
+	if (*arr != NULL)
+	{
+		arr++;
+		*arr = NULL;
+	}
+	*arg_start = *i + 1;
+	return (arr);
 }
 
 t_args	*parse_line(t_args *args, char *s, char **env)
 {
 	t_s_escape state_e;
 	t_s_parser state_p;
-
-	args_init(args);
-//	printf("line: <%s>\n", s);
-
 	int			i;
 	int			arg_start;
-	char		**arr;
+	char		**arg;
 	char		c;
 
-	arr = malloc(sizeof(char *) * 20);
-	arr[0] = NULL;
-	args->arg = arr;
+	args_init(args);
+	arg = args->arg;
 	arg_start = 0;
 	c = s[0];
 	state_p = NON_Q;
@@ -113,26 +125,20 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 				state_p = DOUBLE_Q;
 			else if (state_e == NONESCAPED && c == '\'')
 				state_p = SINGLE_Q;
-			else if (state_e == NONESCAPED && c == '$')
+			else if (state_e == NONESCAPED && c == '$' && s[i + 1] != '?')
 			{
 				s = process_var(s, i, env);
 				if (s == NULL)
 					break;
 			}
-			else if (state_e == NONESCAPED && (c == '>' || c == '<'))
+			else if (state_e == NONESCAPED && c == ';')
 			{
-				add_redirect(&s[i], argsi, &i);
+				arg = add_arg(s, &i, &arg_start, arg);
+				args->next = malloc(sizeof(t_args));
+
 			}
 			else if (state_e == NONESCAPED && (ft_isspace(c) != 0 || c == '\0'))
-			{
-				*arr = msh_substr(s, arg_start, i - arg_start);
-				arr++;
-				*arr = NULL;
-				while (ft_isspace(s[i]) != 0)
-					i++;
-				i--;
-				arg_start = i;
-			}
+				arg = add_arg(s, &i, &arg_start, arg);
 			else {state_p = NON_Q;}
 		}
 		state_e = NONESCAPED;
@@ -142,4 +148,3 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 	print_2d_char(args->arg, ',');
 	return (args);
 }
-
