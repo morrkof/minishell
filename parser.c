@@ -46,7 +46,6 @@ void	args_init(t_args *args)
 	args->flag_out_pipe = 0;
 	args->flag_in_pipe = 0;
 	args->next = NULL;
-	args->prev = NULL;
 	args->red = NULL;
 	args->arg = malloc(sizeof(char *) * 100);
 	args->arg[0] = NULL;
@@ -101,8 +100,11 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 	int			arg_start;
 	char		**arg;
 	char		c;
+	t_args		*head = args;
 
+	head = head;
 	args_init(args);
+	args->prev = NULL;
 	arg = args->arg;
 	arg_start = 0;
 	c = s[0];
@@ -131,10 +133,18 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 				if (s == NULL)
 					break;
 			}
-			else if (state_e == NONESCAPED && c == ';')
+			else if (state_e == NONESCAPED && (c == '|' || c == ';'))
 			{
+				if (c == '|')
+					args->flag_out_pipe = 1;
 				arg = add_arg(s, &i, &arg_start, arg);
 				args->next = malloc(sizeof(t_args));
+				args->next->prev = args;
+				args_init(args->next);
+				args = args->next;
+				arg = args->arg;
+				if (c == '|')
+					args->flag_in_pipe = 1;
 
 			}
 			else if (state_e == NONESCAPED && (ft_isspace(c) != 0 || c == '\0'))
@@ -146,5 +156,5 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 			break;
 	}
 	print_2d_char(args->arg, ',');
-	return (args);
+	return (head);
 }
