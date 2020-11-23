@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:03:30 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/19 01:54:29 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/11/20 16:22:38 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ typedef struct 		s_args
 }					t_args;
 
 void	parse_line(t_args *args, char *line);
-void	execute_command(t_args *args);
+void	execute_command(char *line);
 
 #endif
