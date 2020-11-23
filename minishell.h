@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:03:30 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/19 01:54:29 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/11/23 13:03:10 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ typedef struct 		s_args
 	struct s_args	*next;			// указатель на следующий элемент
 	struct s_args	*prev;			// указатель на предыдущий элемент
 }					t_args;
+
+typedef enum		e_sEscape
+{
+	ESCAPED,
+	NONESCAPED
+}					t_s_escape;
+
+typedef enum		sParser
+{
+	DOUBLE_Q,
+	SINGLE_Q,
+	NON_Q
+}					t_s_parser;
 /*
 typedef struct		s_args
 {
@@ -49,7 +62,8 @@ typedef struct		s_args
 }					t_args;
 */
 
-void	parse_line(t_args *args, char *line);
-void	execute_command(t_args *args);
+t_args	*parse_line(t_args *args, char *line, char **env);
+void	print_2d_char(char **array, char c);
+void	  execute_command(t_args *args);
 
 #endif

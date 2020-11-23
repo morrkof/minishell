@@ -11,92 +11,135 @@
 ** если встречаем > , то фиксируем это во вложенной структуре
 ** а следующее название будет именем файла, тоже его записываем в свою коробочку
 */
-
+/*
+typedef struct 		s_args
+{
+	char			**arg;			// массив строк с аргументами и именем
+	int				n_flag;			// флаг у эха
+	t_red			*red;			// список редиректов (их может быть много)
+	int				flag_out_pipe;	// если пайп справа, то = 1
+	int				flag_in_pipe;	// если пайп слева, то = 1
+	struct s_args	*next;			// указатель на следующий элемент
+	struct s_args	*prev;			// указатель на предыдущий элемент
+}					t_args;
+*/
 #include "minishell.h"
+
+char	*process_var(char *s, int i, char **env);
+void	add_redirect(char *s, t_args *args);
+
+void	print_2d_char(char **array, char c)
+{
+	puts("print_2d_char():");
+	
+	while (*array != NULL)
+	{
+		printf("%s%c", *array, c);
+		array++;
+	}
+	printf("\n");
+}
 
 void	args_init(t_args *args)
 {
 	args->n_flag = 0;
-	
+	args->flag_out_pipe = 0;
+	args->flag_in_pipe = 0;
+	args->next = NULL;
+	args->prev = NULL;
+	args->arg = NULL;
+	args->red = NULL;
 }
 
-void	parse_line(t_args *args, char *line)
+char	*msh_substr(char *s, unsigned int start, size_t len)
 {
-	args_init(args);
-}
-/*
-t_args	*parse_line(char *line, t_args *args)
-{
-	int		i;
-	int		j;
-	int		index;
+	char	*substr;
+	size_t	i;
 	char	c;
-	t_args	a;
-	
-	a = args;
+
+	if (start >= ft_strlen(s))//
+		return NULL;
+	if (!(substr = (char *)malloc(len + 1)))
+		return (NULL);
 	i = 0;
-	j = 0;
-	index = 0;
-	while (line[++i] != '\0')
+	while (i < len && s[start] != '\0')
 	{
-		c = line[i];
-		if (c == '|' && line[i - 1] != '\\')
+		c = s[start];
+		if (c != '\'' && c != '\"')
 		{
-			a->line = ft_substr(line, j, i - j);
-			j = i + 1;
-			a = a->next;
-			a = ft_calloc()
-
-
+			substr[i] = c;	
+			i++;
 		}
-			
+		start++;
 	}
+	substr[i] = '\0';
+	return (substr);
 }
-t_args	*_parse_line(char *line, t_args *args)
+
+t_args	*parse_line(t_args *args, char *s, char **env)
 {
-	char	**av;
-	int		i;
-	int		j;
-	int		index;
+	t_s_escape state_e;
+	t_s_parser state_p;
 
-	av = args->args;
-//	while (ft_isspace(*line))
-//		line++;
+	args_init(args);
+//	printf("line: <%s>\n", s);
+
+	int			i;
+	int			arg_start;
+	char		**arr;
+	char		c;
+
+	arr = malloc(sizeof(char *) * 20);
+	arr[0] = NULL;
+	args->arg = arr;
+	arg_start = 0;
+	c = s[0];
+	state_p = NON_Q;
+	state_e = NONESCAPED;
 	i = -1;
-	j = 0;
-	index = 0;
-	while (line[++i] != '\0')
+	while (++i >= 0)
 	{
-		av[index] = NULL;
-		while (ft_isspace(line[i]) && line[i] != '\0')
-			++i;
-		j = i;
-		while (!ft_isspace(line[i]) && line[i] != '\0')
-			++i;
-		av[index++] = ft_substr(line, j, i - j);
-		av[index] = NULL;
-	}
-}
-*/
-
-t_args	*parse_line1(char *line, t_args *args)
-{
-	int		i;
-	int		j;
-	char	c;
-	int		a;
-	int		b;
-
-	i = -1;
-	a = 0;
-	b = 0;
-	while (line[++i] != '\0')
-	{
-		if (line[i] == '\"')
+		c = s[i];
+		if (c == '\\')
+			state_e = ESCAPED;
+		if (state_p == DOUBLE_Q)
 		{
-			a++;
-			printf("%d\n", i);
+			if (state_e == NONESCAPED && c == '\"')
+				state_p = NON_Q;
 		}
+		else if (state_p == NON_Q)
+		{
+			if (state_e == NONESCAPED && c == '"')
+				state_p = DOUBLE_Q;
+			else if (state_e == NONESCAPED && c == '\'')
+				state_p = SINGLE_Q;
+			else if (state_e == NONESCAPED && c == '$')
+			{
+				s = process_var(s, i, env);
+				if (s == NULL)
+					break;
+			}
+			else if (state_e == NONESCAPED && (c == '>' || c == '<'))
+			{
+				add_redirect(&s[i], argsi, &i);
+			}
+			else if (state_e == NONESCAPED && (ft_isspace(c) != 0 || c == '\0'))
+			{
+				*arr = msh_substr(s, arg_start, i - arg_start);
+				arr++;
+				*arr = NULL;
+				while (ft_isspace(s[i]) != 0)
+					i++;
+				i--;
+				arg_start = i;
+			}
+			else {state_p = NON_Q;}
+		}
+		state_e = NONESCAPED;
+		if (c == '\0')
+			break;
 	}
+	print_2d_char(args->arg, ',');
+	return (args);
 }
 
