@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:03:30 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/23 13:03:10 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/11/24 18:19:09 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 typedef	struct		s_red
 {
-	int				red;			// > - 1;  >> - 2; < - 3; << - 4;
+	int				red;			// > - 1;  >> - 2; < - 3; << - 4; 2> - 5
 	char			*file;			// название файла
 	struct s_red	*next;			//
 	struct s_red	*prev;			//

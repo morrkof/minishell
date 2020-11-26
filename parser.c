@@ -92,25 +92,69 @@ char	**add_arg(char *s, int *i, int *arg_start, char **arr)
 	return (arr);
 }
 
+t_args	*add_command(t_args *args, char c, char ***arg)
+{
+	if (c == '|')
+	args->flag_out_pipe = 1;
+	args->next = malloc(sizeof(t_args));
+	args->next->prev = args;
+	args_init(args->next);
+	args = args->next;
+	*arg = args->arg;
+	if (c == '|')
+		args->flag_in_pipe = 1;
+	return (args);
+}
+
+t_red	*red_init(t_red *red)
+{
+	red = malloc(sizeof(t_red));
+	red->red = 0;
+	red->file = NULL;
+	red->next = NULL;
+	red->prev = NULL;
+
+	return (red);
+}
+
+void	add_red(char *s, int *i, int *arg_start, int *red, t_args *args)
+{
+	char	*str;
+	t_red	*ptr;
+
+	if (!(str = msh_substr(s, *arg_start + 1, *i - *arg_start)))
+		return ;
+	args->red == NULL ? red_init(args->red) : 0;
+	ptr = args->red;
+	while (ptr->next != NULL)
+		ptr = ptr->next;
+	red_init(ptr->next);
+	ptr->next->prev = ptr;
+	ptr = ptr->next;
+	ptr->red = *red;
+	ptr->file = str;
+	*red = 0;
+}
+
 t_args	*parse_line(t_args *args, char *s, char **env)
 {
 	t_s_escape state_e;
 	t_s_parser state_p;
-	int			i;
-	int			arg_start;
+	int			i;//
+	int			arg_start;//
 	char		**arg;
-	char		c;
+	char		c;//
 	t_args		*head = args;
+	int			red;
 
-	head = head;
 	args_init(args);
 	args->prev = NULL;
 	arg = args->arg;
-	arg_start = 0;
-	c = s[0];
 	state_p = NON_Q;
 	state_e = NONESCAPED;
 	i = -1;
+	red = 0;
+	arg_start = 0;
 	while (++i >= 0)
 	{
 		c = s[i];
@@ -135,20 +179,22 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 			}
 			else if (state_e == NONESCAPED && (c == '|' || c == ';'))
 			{
-				if (c == '|')
-					args->flag_out_pipe = 1;
-				arg = add_arg(s, &i, &arg_start, arg);
-				args->next = malloc(sizeof(t_args));
-				args->next->prev = args;
-				args_init(args->next);
-				args = args->next;
-				arg = args->arg;
-				if (c == '|')
-					args->flag_in_pipe = 1;
-
+				red == 0 ? arg = add_arg(s, &i, &arg_start, arg) : add_red(s, &i, &arg_start, &red, args);
+				args = add_command(args, c, &arg);
 			}
-			else if (state_e == NONESCAPED && (ft_isspace(c) != 0 || c == '\0'))
-				arg = add_arg(s, &i, &arg_start, arg);
+			else if (state_e == NONESCAPED && (ft_isspace(c) || c == '\0'))
+				red == 0 ? arg = add_arg(s, &i, &arg_start, arg) : add_red(s, &i, &arg_start, &red, args);
+			else if (state_e == NONESCAPED && (c == '<' || c == '>'))
+			{
+				if (c == '<' && s[i + 1] == '<')
+					red = 4;
+				if (c == '>' && s[i + 1] == '>')
+					red = 2;
+				if (c == '<')
+					red = 3;
+				if (c == '>')
+					red = 1;
+			}
 			else {state_p = NON_Q;}
 		}
 		state_e = NONESCAPED;
