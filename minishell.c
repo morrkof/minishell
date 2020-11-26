@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:02:28 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/23 18:30:43 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/11/26 13:55:14 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(void)
+int main(int argc, char *argv[], char *envp[])
 {
 	char *line;
 	char *pwd;
 	// t_args args; // это отправим в парсер
 
+	(void)argc;
+	(void)argv;
 	while (1)
 	{
 		write(1, "MINISHELL@42:", 13); // приглашение ввода
@@ -27,7 +29,7 @@ int main(void)
 		free(pwd);
 		get_next_line(0, &line); // считываем строку из stdin
 		// parse_line(&args, line); // тут будет парсер
-		execute_command(line);	// сюда структура должна попасть уже заполненной
+		execute_command(line, envp);	// сюда структура должна попасть уже заполненной
 		// printf("READ THIS: %s\n", line); // распечатаем что мы считали
 		free(line);
 	}
