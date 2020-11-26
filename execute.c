@@ -6,7 +6,7 @@
 /*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/26 15:34:36 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/11/26 18:31:09 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void    ft_fork(char **args, char **envp)
     pid_t wpid;
     int status;
 
-    pid = fork();
+    (void)wpid;
+	pid = fork();
     if (pid == 0) // это дочка
 	{
 		if (execve(args[0], args, envp) == -1)

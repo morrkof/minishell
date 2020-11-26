@@ -6,7 +6,7 @@
 /*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 15:17:15 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/26 15:22:54 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/11/26 18:29:57 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 # include "libft/libft.h"
+#include <sys/types.h>
+#include <sys/wait.h>
 
 typedef	struct		s_red
 {
