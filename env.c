@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/29 23:39:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/05/13 23:34:02 by miphigen         ###   ########.fr       */
+/*   Created: 2020/11/25 21:42:50 by miphigen          #+#    #+#             */
+/*   Updated: 2020/11/25 22:31:35 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+void	env(char **env)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < n && s1[i] && s2[i])
+	while (*env)
 	{
-		if (s1[i] != s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		i++;
+		write(1, *env, ft_strlen(*env));
+		env++;
 	}
-	if ((!s1[i] || !s2[i]) && (i < n))
-		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-	return (0);
+}
+
+void	export(char **env, char *s)
+{
+	
+}
+
+void	unset(char **env, char *s)
+{
+	
 }

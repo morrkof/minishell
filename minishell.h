@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/19 01:03:30 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/26 13:48:23 by ppipes           ###   ########.fr       */
+/*   Created: 2020/11/26 15:17:15 by ppipes            #+#    #+#             */
+/*   Updated: 2020/11/26 15:22:54 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 typedef	struct		s_red
 {
-	int				red;			// > - 1;  >> - 2; < - 3; << - 4;
+	int				red;			// > - 1;  >> - 2; < - 3; << - 4; 2> - 5
 	char			*file;			// название файла
 	struct s_red	*next;			//
 	struct s_red	*prev;			//
@@ -39,7 +39,22 @@ typedef struct 		s_args
 	struct s_args	*prev;			// указатель на предыдущий элемент
 }					t_args;
 
-void	parse_line(t_args *args, char *line);
-void	execute_command(char *line, char **envp);
+typedef enum		e_sEscape
+{
+	ESCAPED,
+	NONESCAPED
+}					t_s_escape;
+
+typedef enum		sParser
+{
+	DOUBLE_Q,
+	SINGLE_Q,
+	NON_Q
+}					t_s_parser;
+
+t_args	*parse_line(t_args *args, char *line, char **env);
+void	print_2d_char(char **array, char c);
+void	execute_command(t_args *args, char **envp);
+
 
 #endif

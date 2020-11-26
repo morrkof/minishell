@@ -6,7 +6,7 @@
 /*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/26 13:58:49 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/11/26 15:34:36 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_echo(char **args, int flag)
 {
 	int i;
 
-	i = 0;
+	i = 1;
 	while (args[i] != 0)
 	{
 		write(1, args[i], ft_strlen(args[i]));
@@ -34,7 +34,7 @@ void	ft_echo(char **args, int flag)
 
 void    ft_cd(char **args)
 {
-    chdir(args[0]);
+    chdir(args[1]);
 }
 
 void	ft_pwd()
@@ -58,12 +58,12 @@ void    ft_fork(char **args, char **envp)
 	{
 		if (execve(args[0], args, envp) == -1)
 		{
-			perror ("lsh");
+			perror ("error");
 			exit (-1);
 		}
 	}
 	else if (pid < 0) // это ошибка
-			perror ("lsh");
+			perror ("errorg");
 	else // это родитель
 	{
 		do {
@@ -72,19 +72,20 @@ void    ft_fork(char **args, char **envp)
 	}
 }
 
-void	execute_command(char *line, char **envp)
+void	execute_command(t_args *args, char **envp)
 {
-	char *args[] = {"..", "Blablabla", "ololo", NULL};
+	char *line;
+	line = args->arg[0];
 	// char *arg2 = "..";
 	// char *arg3 = "$PATH";
 	int flag_n = 0;
 
 	if (!(ft_strncmp(line, "echo", 4)))
-		ft_echo(args, flag_n);
+		ft_echo(args->arg, flag_n);
 	else if (!(ft_strncmp(line, "pwd", 3)))
 		ft_pwd();
 	else if (!(ft_strncmp(line, "cd", 2)))
-		ft_cd(args);
+		ft_cd(args->arg);
 	else if (!(ft_strncmp(line, "export", 6)))
 		printf("check export\n");
 	else if (!(ft_strncmp(line, "unset", 5)))
@@ -94,5 +95,5 @@ void	execute_command(char *line, char **envp)
 	else if (!(ft_strncmp(line, "exit", 4)))
 		exit(0);
 	else
-		ft_fork(args, envp);
+		ft_fork(args->arg, envp);
 }
