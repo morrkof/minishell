@@ -157,11 +157,10 @@ void	add_red(char *s, int *i, int *start, int *red, t_args *args)
 	{
 		ptr = args->red;
 		while (ptr->next != NULL)
-			ptr = ptr->next;
-	}	
-	ptr = args->red;
-	while (ptr->next != NULL)
+			ptr = ptr->next;		
+		ptr->next = red_init(ptr->next);
 		ptr = ptr->next;
+	}
 	ptr->red = *red;
 	ptr->file = ft_strtrim(str, " \t\r\n\f\v");
 	free(str);
