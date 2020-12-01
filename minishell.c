@@ -6,7 +6,7 @@
 /*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 15:17:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/26 15:36:31 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/11/27 14:48:17 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int main(int ac, char **av, char **env)
 		free(pwd);
 		get_next_line(0, &line); // считываем строку из stdin
 		parse_line(&args, line, env_var); // тут будет парсер
-		execute_command(&args, env_var);	// сюда структура должна попасть уже заполненной
+		//execute_command(&args, env_var);	// сюда структура должна попасть уже заполненной
 		//printf("READ THIS: %s\n", line); // распечатаем что мы считали
 		free(line);
 	}
