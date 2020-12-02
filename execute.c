@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/26 18:31:09 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/02 17:34:29 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,23 @@ int		ft_exit()
 	return (0);
 }
 
-void	ft_echo(char **args, int flag)
+void	ft_echo(char **args)
 {
 	int i;
+	int flag;
 
+	flag = 0;
 	i = 1;
+	if(!(ft_strncmp(args[1], "-n", 2)))
+	{
+		flag = 1;
+		i = 2;
+	}
 	while (args[i] != 0)
 	{
 		write(1, args[i], ft_strlen(args[i]));
-		write(1, " ", 1);
+		if (args[i + 1] != 0)
+			write(1, " ", 1);
 		i++;
 	}
 	if (!flag)
@@ -79,10 +87,9 @@ void	execute_command(t_args *args, char **envp)
 	line = args->arg[0];
 	// char *arg2 = "..";
 	// char *arg3 = "$PATH";
-	int flag_n = 0;
 
 	if (!(ft_strncmp(line, "echo", 4)))
-		ft_echo(args->arg, flag_n);
+		ft_echo(args->arg);
 	else if (!(ft_strncmp(line, "pwd", 3)))
 		ft_pwd();
 	else if (!(ft_strncmp(line, "cd", 2)))
