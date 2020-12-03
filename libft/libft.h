@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 23:28:33 by ppipes            #+#    #+#             */
-/*   Updated: 2020/10/31 22:04:30 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/04 02:13:35 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,5 @@ int				read_buf(int fd, int *result, char **line, char **buf);
 int				process_tail(char **line, char **tail, int *is_tail);
 char			*write_head(char *buf);
 void			ft_strcpy(char *dst, char *src);
+int				ft_strcmp(char *s1, char *s2);
 #endif

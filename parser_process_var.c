@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_process_var.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:52:40 by miphigen          #+#    #+#             */
-/*   Updated: 2020/11/26 15:26:55 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/03 22:10:42 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ char	*ret_value(char **env, char *var, int *size)
 		if (ft_strncmp(var, variable, ft_strlen(var) + 1) == 0)
 		{
 			s = ft_substr(s, *size + 1, ft_strlen(s) - *size);
-			free(variable);
+			// free(variable);
 			return (s);
 		}
-		free(variable);
+		// free(variable);
 		env++;
 	}	
 	return NULL;
@@ -47,7 +47,7 @@ char	*get_value(char *s, int i, char **env, int *size)
 		var = ft_substr(s, i + 1, j);
 		val = ret_value(env, var, size);
 //		printf("ret value() %s\n", val);
-		free(var);
+		// free(var);
 		if (val != NULL)
 			break;
 		j++;
@@ -71,7 +71,7 @@ char	*process_var(char *s, int i, char **env)
 	ft_memcpy(&ret_value[i], s2, ft_strlen(s2));
 	ret_value[i + ft_strlen(s2)] = '\0';
 	ft_strlcat(&ret_value[i + ft_strlen(s2)], &s[i + 1 + size], ft_strlen(s) - i);//
-	free(s);
+	// free(s);
 	return (ret_value);
 	
 }

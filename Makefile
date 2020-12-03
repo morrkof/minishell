@@ -14,7 +14,7 @@ NAME = minishell
 SRC = minishell.c parser.c parser_process_var.c execute.c
 HEADER = ./minishell.h
 OBJ = $(SRC:.c=.o)
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -g
 LIBFLAGS = -Llibft -lft
 LIBFT = ./libft/libft.a
 

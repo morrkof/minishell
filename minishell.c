@@ -3,14 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 15:17:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/11/26 15:36:31 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/04 01:50:25 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_env **char_to_struct(char **src)
+{
+	t_env	**dest;
+	size_t	len;
+	size_t	i;
+	int		eq;
+
+	len = 0;
+	i = 0;
+	while(src[len])
+		len++;
+	dest = malloc(sizeof(t_env *) * (len + 1));
+	while(i < len)
+	{
+		dest[i] = malloc(sizeof(t_env));
+		eq = ft_strchr(src[i], '=') - src[i];
+		dest[i]->name = ft_substr(src[i], 0, eq);
+		dest[i]->val = ft_substr(src[i], eq + 1, ft_strlen(src[i]) - eq);
+		// printf("SRC %s \n NAME %s \n VALUE %s \n", src[i], dest[i]->name, dest[i]->val);
+		i++;
+	}
+	dest[i] = NULL;
+	return(dest);
+}
+
+char	**struct_to_char(t_env **src)
+{
+	char **dest;
+	char	*tmp;
+	size_t	len;
+	size_t i;
+
+	len = 0;
+	i = 0;
+	while(src[len])
+		len++;
+	dest = malloc(sizeof(char *) * (len + 1));
+	while(i < len)
+	{
+		tmp = ft_strjoin(src[i]->name, "=");
+		dest[i] = ft_strjoin(tmp, src[i]->val);
+		free(tmp);
+		i++;
+	}
+	dest[i] = NULL;
+	return(dest);
+
+}
 
 char	**copy_array(char **dest, char **src)
 {
@@ -34,24 +83,35 @@ int main(int ac, char **av, char **env)
 {
 	char	*line;
 	t_args	args; // это отправим в парсер
-	char	**env_var = NULL;
+	t_args	*cur;
+	// char	**env_var = NULL;
+	t_env	**env_var2 = NULL;
 	char	*pwd;
 	
 	(void)ac;
 	(void)av;	
-	env_var = copy_array(env_var, env);
-	
+	// env_var = copy_array(env_var, env);
+	env_var2 = char_to_struct(env);
 	//print_2d_char(env, '\n');
+	// printf("%s\n", (get_env(env_var2, "PATH"))->val);
+	// set_env(env_var2, "PATH", "blabla");
+	// printf("%s\n", (get_env(env_var2, "PATH"))->val);
+	// get_path("ls", "/home/anastasia/Desktop/minishell");
 	while (1)
 	{
-		write(1, "bash: ", 5); // приглашение ввода
+		write(1, "msh:", 4); // приглашение ввода
 		pwd = getcwd(NULL, 0);
 		write (1, pwd, ft_strlen(pwd));
 		write(1, "$ ", 2);
 		free(pwd);
 		get_next_line(0, &line); // считываем строку из stdin
-		parse_line(&args, line, env_var); // тут будет парсер
-		execute_command(&args, env_var);	// сюда структура должна попасть уже заполненной
+		parse_line(&args, line, struct_to_char(env_var2)); // тут будет парсер
+		cur = &args;
+		while (cur != NULL)
+		{
+			execute_command(cur, env_var2);	// сюда структура должна попасть уже заполненной
+			cur = cur->next;
+		}
 		//printf("READ THIS: %s\n", line); // распечатаем что мы считали
 		free(line);
 	}

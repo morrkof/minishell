@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/02 17:34:29 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/04 02:19:09 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,37 @@ void	ft_echo(char **args)
 		write(1, "\n", 1);
 }
 
-void    ft_cd(char **args)
+void    ft_cd(char **args, t_env **env)
 {
     chdir(args[1]);
+	set_env(env, "PWD", getcwd(NULL, 0));
 }
+
+t_env	*get_env(t_env **env, char *name)
+{
+	while(*env)
+	{
+		if(!(ft_strncmp((*env)->name, name, ft_strlen(name))))
+			return(*env);
+		env++;
+	}
+	return (NULL);
+}
+
+int		set_env(t_env **env, char *name, char *val)
+{
+	t_env *tmp;
+
+	if(tmp = get_env(env, name))
+	{
+		free(tmp->val);
+		tmp->val = ft_strdup(val);
+	}
+	// else - добавить переменную
+	// сделать return 
+}
+
+
 
 void	ft_pwd()
 {
@@ -55,17 +82,48 @@ void	ft_pwd()
 	free(buf);
 }
 
-void    ft_fork(char **args, char **envp)
+char	*get_path(char *command, char *path)
+{
+	char **paths;
+	DIR *dir;
+	struct dirent *ent;
+	int i;
+
+	i = 0;
+	paths = ft_split(path, ':');
+	while(paths[i])
+	{
+		dir = opendir(paths[i]);
+		while (ent = readdir(dir))
+		{
+			if (!(ft_strcmp(command, ent->d_name)))
+			{
+				closedir(dir);
+				return(paths[i]);
+			}
+			// printf("%s\n", ent->d_name);
+		}
+		closedir(dir);
+		i++;
+	}
+	return("errorp");
+}
+
+void    ft_fork(char **args, t_env **env)
 {
     pid_t pid;
     pid_t wpid;
     int status;
+	char *abs_path;
+	char *tmp;
 
     (void)wpid;
+	abs_path = get_path(args[0], (get_env(env, "PATH"))->val);
+	tmp = ft_strjoin(abs_path, "/");
 	pid = fork();
     if (pid == 0) // это дочка
 	{
-		if (execve(args[0], args, envp) == -1)
+		if (execve(ft_strjoin(tmp, args[0]), args, struct_to_char(env)) == -1)
 		{
 			perror ("error");
 			exit (-1);
@@ -81,19 +139,19 @@ void    ft_fork(char **args, char **envp)
 	}
 }
 
-void	execute_command(t_args *args, char **envp)
+
+void	execute_command(t_args *args, t_env **env)
 {
 	char *line;
 	line = args->arg[0];
-	// char *arg2 = "..";
-	// char *arg3 = "$PATH";
+
 
 	if (!(ft_strncmp(line, "echo", 4)))
 		ft_echo(args->arg);
 	else if (!(ft_strncmp(line, "pwd", 3)))
 		ft_pwd();
 	else if (!(ft_strncmp(line, "cd", 2)))
-		ft_cd(args->arg);
+		ft_cd(args->arg, env);
 	else if (!(ft_strncmp(line, "export", 6)))
 		printf("check export\n");
 	else if (!(ft_strncmp(line, "unset", 5)))
@@ -103,5 +161,5 @@ void	execute_command(t_args *args, char **envp)
 	else if (!(ft_strncmp(line, "exit", 4)))
 		exit(0);
 	else
-		ft_fork(args->arg, envp);
+		ft_fork(args->arg, env);
 }
