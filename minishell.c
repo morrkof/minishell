@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/26 15:17:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 01:50:25 by ppipes           ###   ########.fr       */
+/*   Created: 2020/12/04 20:12:21 by ppipes            #+#    #+#             */
+/*   Updated: 2020/12/04 20:12:35 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int main(int ac, char **av, char **env)
 			execute_command(cur, env_var2);	// сюда структура должна попасть уже заполненной
 			cur = cur->next;
 		}
+
 		//printf("READ THIS: %s\n", line); // распечатаем что мы считали
 		free(line);
 	}

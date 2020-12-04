@@ -3,6 +3,24 @@
 char	*process_var(char *s, int i, char **env);
 void	add_redirect(char *s, t_args *args);
 
+void	print_args(t_args *args)
+{
+	t_red	*red;
+	while (args != NULL)
+	{
+		printf("\n%p\nflag_in_out = %d/%d\n", args, args->flag_in_pipe, args->flag_out_pipe);
+		print_2d_char(args->arg, ',');
+		red = args->red;
+		while (red != NULL)
+		{
+			printf("redirect: file = %s, type = %d\n", red->file, red->red);
+			red = red->next;
+		}
+		args = args->next;
+		puts("");
+	}
+}
+
 void	print_2d_char(char **array, char c)
 {
 	puts("print_2d_char():");
@@ -55,15 +73,17 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	return NULL;
 }
 
-char	**add_arg(char *s, int *i, int *arg_start, char **arr)
+char	**add_arg(char *s, int *i, int *start, char **arr)
 {
-	*arr = msh_substr(s, *arg_start, *i - *arg_start);
+	*arr = msh_substr(s, *start, *i - *start);
 	if (*arr != NULL)
 	{
 		arr++;
 		*arr = NULL;
 	}
-	*arg_start = *i + 1;
+	while (s[*i + 1] == ' ')
+		(*i)++;
+	*start = *i + 1;
 	return (arr);
 }
 
@@ -92,22 +112,33 @@ t_red	*red_init(t_red *red)
 	return (red);
 }
 
-void	add_red(char *s, int *i, int *arg_start, int *red, t_args *args)
+void	add_red(char *s, int *i, int *start, int *red, t_args *args)
 {
 	char	*str;
 	t_red	*ptr;
 
-	if (!(str = msh_substr(s, *arg_start + 1, *i - *arg_start)))
+	if (!(str = msh_substr(s, *start, *i - *start)))
+	{	
+		(*start)++;
 		return ;
-	args->red == NULL ? red_init(args->red) : 0;
-	ptr = args->red;
-	while (ptr->next != NULL)
+	}
+	*start = *i + 1;
+	if (args->red == NULL)
+	{
+		args->red = red_init(args->red);
+		ptr = args->red;
+	}
+	else
+	{
+		ptr = args->red;
+		while (ptr->next != NULL)
+			ptr = ptr->next;		
+		ptr->next = red_init(ptr->next);
 		ptr = ptr->next;
-	red_init(ptr->next);
-	ptr->next->prev = ptr;
-	ptr = ptr->next;
+	}
 	ptr->red = *red;
-	ptr->file = str;
+	ptr->file = ft_strtrim(str, " \t\r\n\f\v");
+	free(str);
 	*red = 0;
 }
 
@@ -116,7 +147,7 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 	t_s_escape state_e;
 	t_s_parser state_p;
 	int			i;//
-	int			arg_start;//
+	int			start;//
 	char		**arg;
 	char		c;//
 	t_args		*head = args;
@@ -129,53 +160,67 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 	state_e = NONESCAPED;
 	i = -1;
 	red = 0;
-	arg_start = 0;
+	start = 0;
 	while (++i >= 0)
 	{
 		c = s[i];
-		if (c == '\\')
+		if (state_e == NONESCAPED && c == '\\')
+		{	
 			state_e = ESCAPED;
-		if (state_p == DOUBLE_Q)
-		{
-			if (state_e == NONESCAPED && c == '\"')
-				state_p = NON_Q;
+			continue;
 		}
+		else if (state_e == ESCAPED)
+		{
+			state_e = NONESCAPED;
+			continue;
+		}
+
+		if (state_p == DOUBLE_Q && c == '\"')
+				state_p = NON_Q;
 		else if (state_p == NON_Q)
 		{
-			if (state_e == NONESCAPED && c == '"')
+			if (c == '"')
 				state_p = DOUBLE_Q;
-			else if (state_e == NONESCAPED && c == '\'')
+			else if (c == '\'')
 				state_p = SINGLE_Q;
-			else if (state_e == NONESCAPED && c == '$' && s[i + 1] != '?')
+			else if (c == '$')
 			{
 				s = process_var(s, i, env);
 				if (s == NULL)
 					break;
+				i--;
 			}
-			else if (state_e == NONESCAPED && (c == '|' || c == ';'))
+			else if ((c == '|' || c == ';'))
 			{
-				red == 0 ? arg = add_arg(s, &i, &arg_start, arg) : add_red(s, &i, &arg_start, &red, args);
+				red == 0 ? arg = add_arg(s, &i, &start, arg) : add_red(s, &i, &start, &red, args);
 				args = add_command(args, c, &arg);
 			}
-			else if (state_e == NONESCAPED && (ft_isspace(c) || c == '\0'))
-				red == 0 ? arg = add_arg(s, &i, &arg_start, arg) : add_red(s, &i, &arg_start, &red, args);
-			else if (state_e == NONESCAPED && (c == '<' || c == '>'))
+			else if ((ft_isspace(c) || c == '\n' || c == '\0'))
+				red == 0 ? arg = add_arg(s, &i, &start, arg) : add_red(s, &i, &start, &red, args);
+			else if ((c == '<' || c == '>'))
 			{
+				red == 0 ? arg = add_arg(s, &i, &start, arg) : add_red(s, &i, &start, &red, args);
 				if (c == '<' && s[i + 1] == '<')
+				{	
 					red = 4;
-				if (c == '>' && s[i + 1] == '>')
+					i++;
+					start++;
+				}
+				else if (c == '>' && s[i + 1] == '>')
+				{	
 					red = 2;
-				if (c == '<')
+					i++;
+					start++;
+				}
+				else if (c == '<')
 					red = 3;
-				if (c == '>')
+				else if (c == '>')
 					red = 1;
-			}
-			else {state_p = NON_Q;}
+				}
 		}
-		state_e = NONESCAPED;
 		if (c == '\0')
 			break;
 	}
-	// print_2d_char(args->arg, ',');
+	// print_args(head);
 	return (head);
 }

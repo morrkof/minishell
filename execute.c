@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 16:09:45 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/04 20:14:24 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void    ft_fork(char **args, t_env **env)
 		exec_path = ft_strjoin(tmp, args[0]);
 	}
 	pid = fork();
-	printf("command - %s \nargument %s\n", exec_path, args[0]);
+	// printf("command - %s \nargument %s\n", exec_path, args[0]);
     if (pid == 0) // это дочка
 	{
 		if (execve(exec_path, args, struct_to_char(env)) == -1)
