@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 02:19:09 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/04 16:09:45 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,20 @@ void	ft_pwd()
 char	*get_path(char *command, char *path)
 {
 	char **paths;
+	char *pwd;
+	char *tmp;
+	char *path_with_cur;
 	DIR *dir;
 	struct dirent *ent;
 	int i;
 
 	i = 0;
-	paths = ft_split(path, ':');
+	pwd = getcwd(NULL, 0);
+	tmp = ft_strjoin(pwd, ":");
+	free(pwd);
+	path_with_cur = ft_strjoin(tmp, path);
+	free(tmp);
+	paths = ft_split(path_with_cur, ':');
 	while(paths[i])
 	{
 		dir = opendir(paths[i]);
@@ -116,14 +124,21 @@ void    ft_fork(char **args, t_env **env)
     int status;
 	char *abs_path;
 	char *tmp;
+	char *exec_path;
 
     (void)wpid;
-	abs_path = get_path(args[0], (get_env(env, "PATH"))->val);
-	tmp = ft_strjoin(abs_path, "/");
+	exec_path = args[0];
+	if(!(ft_strchr(args[0], '/')))
+	{
+		abs_path = get_path(args[0], (get_env(env, "PATH"))->val);
+		tmp = ft_strjoin(abs_path, "/");
+		exec_path = ft_strjoin(tmp, args[0]);
+	}
 	pid = fork();
+	printf("command - %s \nargument %s\n", exec_path, args[0]);
     if (pid == 0) // это дочка
 	{
-		if (execve(ft_strjoin(tmp, args[0]), args, struct_to_char(env)) == -1)
+		if (execve(exec_path, args, struct_to_char(env)) == -1)
 		{
 			perror ("error");
 			exit (-1);
