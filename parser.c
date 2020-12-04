@@ -183,13 +183,13 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 				state_p = DOUBLE_Q;
 			else if (c == '\'')
 				state_p = SINGLE_Q;
-			else if (c == '$')
-			{
-				s = process_var(s, i, env);
-				if (s == NULL)
-					break;
-				i--;
-			}
+	//		else if (c == '$')
+	//		{
+	//			s = process_var(s, i, env);
+	//			if (s == NULL)
+	//				break;
+	//			i--;
+	//		}
 			else if ((c == '|' || c == ';'))
 			{
 				red == 0 ? arg = add_arg(s, &i, &start, arg) : add_red(s, &i, &start, &red, args);
@@ -221,6 +221,6 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 		if (c == '\0')
 			break;
 	}
-	// print_args(head);
+//	 print_args(head);
 	return (head);
 }

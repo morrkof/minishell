@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:52:40 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/03 22:10:42 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/04 23:48:29 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ret_value(char **env, char *var, int *size)
 			// free(variable);
 			return (s);
 		}
-		// free(variable);
+		// free(variable);//вот и двойное освобождение?
 		env++;
 	}	
 	return NULL;
@@ -46,7 +46,6 @@ char	*get_value(char *s, int i, char **env, int *size)
 	{
 		var = ft_substr(s, i + 1, j);
 		val = ret_value(env, var, size);
-//		printf("ret value() %s\n", val);
 		// free(var);
 		if (val != NULL)
 			break;
@@ -61,9 +60,7 @@ char	*process_var(char *s, int i, char **env)
 	char	*ret_value;
 	int		size;
 
-//	printf("!");
 	s2 = get_value(s, i, env, &size);
-//	printf("!!! = %s\n", s2);
 	if (s2 == NULL)
 		return (NULL);
 	ret_value = malloc(ft_strlen(s2) + ft_strlen(s) + 1);
@@ -74,4 +71,34 @@ char	*process_var(char *s, int i, char **env)
 	// free(s);
 	return (ret_value);
 	
+}
+void	process_variables(t_args *args, char **env_var2)
+{
+	char	**arr;
+	char	*s;
+	int		i;
+	int		j;
+	char	c;
+
+	arr = args->arg;
+	i = -1;
+	while (arr[++i] != NULL)
+	{
+		j = -1;
+		s = arr[i];
+		while (s[++j] != '\0')
+		{
+			if (s[j] == '$')
+			{
+				s = process_var(s, j, env_var2);
+				j--;
+				arr[i] = s;
+				if (s == NULL)
+				{
+					arr[i] = ft_strdup("");
+					break;
+				}
+			}
+		}
+	}
 }

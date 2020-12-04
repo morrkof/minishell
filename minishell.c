@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 20:12:21 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 20:12:35 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/04 22:48:40 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int main(int ac, char **av, char **env)
 		cur = &args;
 		while (cur != NULL)
 		{
+			process_variables(cur, struct_to_char(env_var2));
 			execute_command(cur, env_var2);	// сюда структура должна попасть уже заполненной
 			cur = cur->next;
 		}

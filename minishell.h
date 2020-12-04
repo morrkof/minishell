@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 15:17:15 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 01:45:27 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/04 22:34:51 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int		set_env(t_env **env, char *name, char *val);
 char	**struct_to_char(t_env **src);
 t_env **char_to_struct(char **src);
 char	*get_path(char *command, char *path);
+void	process_variables(t_args *args, char **env_var2);
 
 
 #endif
