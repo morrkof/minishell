@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 20:12:21 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/07 19:31:42 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/07 19:44:35 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,13 @@ void	hello_sigint()
 	hello();
 }
 
-int main(int ac, char **av, char **env, int t)
+int main(int ac, char **av, char **env, int res)
 {
 	char	*line;
 	t_args	args; // это отправим в парсер
 	t_args	*cur;
 	t_env	**env_var2 = NULL;
 	char	*pwd;
-	int		res;
 
 	(void)ac;
 	(void)av;	
