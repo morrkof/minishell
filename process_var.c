@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:52:40 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/04 23:48:29 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/06 22:48:57 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,9 @@ char	*ret_value(char **env, char *var, int *size)
 		if (ft_strncmp(var, variable, ft_strlen(var) + 1) == 0)
 		{
 			s = ft_substr(s, *size + 1, ft_strlen(s) - *size);
-			// free(variable);
 			return (s);
 		}
-		// free(variable);//вот и двойное освобождение?
+		 free(variable);
 		env++;
 	}	
 	return NULL;
@@ -46,7 +45,7 @@ char	*get_value(char *s, int i, char **env, int *size)
 	{
 		var = ft_substr(s, i + 1, j);
 		val = ret_value(env, var, size);
-		// free(var);
+		 free(var);
 		if (val != NULL)
 			break;
 		j++;
@@ -68,7 +67,7 @@ char	*process_var(char *s, int i, char **env)
 	ft_memcpy(&ret_value[i], s2, ft_strlen(s2));
 	ret_value[i + ft_strlen(s2)] = '\0';
 	ft_strlcat(&ret_value[i + ft_strlen(s2)], &s[i + 1 + size], ft_strlen(s) - i);//
-	// free(s);
+	 free(s);
 	return (ret_value);
 	
 }
@@ -78,7 +77,6 @@ void	process_variables(t_args *args, char **env_var2)
 	char	*s;
 	int		i;
 	int		j;
-	char	c;
 
 	arr = args->arg;
 	i = -1;

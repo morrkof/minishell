@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 20:14:24 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/06 22:16:19 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,26 +155,26 @@ void    ft_fork(char **args, t_env **env)
 }
 
 
-void	execute_command(t_args *args, t_env **env)
+void	execute_command(t_args *args, t_env ***env)
 {
 	char *line;
 	line = args->arg[0];
 
 
-	if (!(ft_strncmp(line, "echo", 4)))
+	if (!(ft_strncmp(line, "echo", 4 + 1)))
 		ft_echo(args->arg);
-	else if (!(ft_strncmp(line, "pwd", 3)))
+	else if (!(ft_strncmp(line, "pwd", 3 + 1)))
 		ft_pwd();
-	else if (!(ft_strncmp(line, "cd", 2)))
-		ft_cd(args->arg, env);
-	else if (!(ft_strncmp(line, "export", 6)))
-		printf("check export\n");
-	else if (!(ft_strncmp(line, "unset", 5)))
-		printf("check unset\n");
-	else if (!(ft_strncmp(line, "env", 3)))
-		printf("check env\n");
-	else if (!(ft_strncmp(line, "exit", 4)))
+	else if (!(ft_strncmp(line, "cd", 2 + 1)))
+		ft_cd(args->arg, *env);
+	else if (!(ft_strncmp(line, "export", 6 + 1)))
+		*env = msh_export(*env, args->arg);
+	else if (!(ft_strncmp(line, "unset", 5 + 1)))
+		msh_unset(*env, args->arg);
+	else if (!(ft_strncmp(line, "env", 3 + 1)))
+		msh_env(*env);
+	else if (!(ft_strncmp(line, "exit", 4 + 1)))
 		exit(0);
 	else
-		ft_fork(args->arg, env);
+		ft_fork(args->arg, *env);
 }

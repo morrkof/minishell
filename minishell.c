@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 20:12:21 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 22:48:40 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/07 19:31:42 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,60 +61,59 @@ char	**struct_to_char(t_env **src)
 
 }
 
-char	**copy_array(char **dest, char **src)
+void	hello()
 {
-	size_t	length;
-	int		i;
-
-	length = 0;
-	while (src[length])
-		++length;
-	dest = malloc(sizeof(char *) * (length + 10));
-	i = -1;
-	while (src[++i])
-	{
-		dest[i] = src[i];
-	}
-	dest[i] = NULL;
-	return (dest);
+	char	*pwd;
+	
+	write(1, "msh:", 4); // приглашение ввода
+	pwd = getcwd(NULL, 0);
+	write (1, pwd, ft_strlen(pwd));
+	write(1, "$ ", 2);
+	free(pwd);
 }
 
-int main(int ac, char **av, char **env)
+void	hello_sigquit()
+{
+	write(1,"\b\b  \b\b", 6);
+	SIG_IGN;
+}
+
+void	hello_sigint()
+{
+	write(1, "\n", 1);
+	SIG_IGN;
+	hello();
+}
+
+int main(int ac, char **av, char **env, int t)
 {
 	char	*line;
 	t_args	args; // это отправим в парсер
 	t_args	*cur;
-	// char	**env_var = NULL;
 	t_env	**env_var2 = NULL;
 	char	*pwd;
-	
+	int		res;
+
 	(void)ac;
 	(void)av;	
-	// env_var = copy_array(env_var, env);
 	env_var2 = char_to_struct(env);
-	//print_2d_char(env, '\n');
-	// printf("%s\n", (get_env(env_var2, "PATH"))->val);
-	// set_env(env_var2, "PATH", "blabla");
-	// printf("%s\n", (get_env(env_var2, "PATH"))->val);
-	// get_path("ls", "/home/anastasia/Desktop/minishell");
+	res = 1;
 	while (1)
 	{
-		write(1, "msh:", 4); // приглашение ввода
-		pwd = getcwd(NULL, 0);
-		write (1, pwd, ft_strlen(pwd));
-		write(1, "$ ", 2);
-		free(pwd);
-		get_next_line(0, &line); // считываем строку из stdin
-		parse_line(&args, line, struct_to_char(env_var2)); // тут будет парсер
+		signal(SIGINT, hello_sigint);
+		signal(SIGQUIT, hello_sigquit);
+		res == 0 ? 0 : hello();//приглашение ввода
+		res = get_next_line(0, &line); // считываем строку из stdin
+		if (res == 0)
+			continue;
+		parse_line(&args, line); // тут будет парсер
 		cur = &args;
 		while (cur != NULL)
 		{
 			process_variables(cur, struct_to_char(env_var2));
-			execute_command(cur, env_var2);	// сюда структура должна попасть уже заполненной
+			execute_command(cur, &env_var2);	// сюда структура должна попасть уже заполненной
 			cur = cur->next;
 		}
-
-		//printf("READ THIS: %s\n", line); // распечатаем что мы считали
 		free(line);
 	}
 	return (0);

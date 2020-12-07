@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 15:17:15 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 22:34:51 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/07 12:37:55 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <dirent.h>
+#include <signal.h>
 
 typedef	struct		s_env
 {
@@ -61,15 +62,18 @@ typedef enum		sParser
 	NON_Q
 }					t_s_parser;
 
-t_args	*parse_line(t_args *args, char *line, char **env);
+t_args	*parse_line(t_args *args, char *line);
 void	print_2d_char(char **array, char c);
-void	execute_command(t_args *args, t_env **env);
+void	execute_command(t_args *args, t_env ***env);
 t_env	*get_env(t_env **env, char *name);
 int		set_env(t_env **env, char *name, char *val);
 char	**struct_to_char(t_env **src);
 t_env **char_to_struct(char **src);
 char	*get_path(char *command, char *path);
 void	process_variables(t_args *args, char **env_var2);
+void	msh_env(t_env **env);
+void	msh_unset(t_env **env, char **arr);
+t_env	**msh_export(t_env **env, char **arr);
 
 
 #endif

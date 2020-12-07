@@ -6,15 +6,15 @@
 #    By: ppipes <student.21-school.ru>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#    Updated: 2020/11/26 15:14:25 by ppipes           ###   ########.fr        #
+#*   Updated: 2020/12/06 22:51:00 by miphigen         ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-SRC = minishell.c parser.c parser_process_var.c execute.c
+SRC = minishell.c parser.c process_var.c execute.c env_unset.c export.c
 HEADER = ./minishell.h
 OBJ = $(SRC:.c=.o)
-CFLAGS = -g
+CFLAGS = -g #-Wall -Wextra -Werror
 LIBFLAGS = -Llibft -lft
 LIBFT = ./libft/libft.a
 

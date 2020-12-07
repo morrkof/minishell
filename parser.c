@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-char	*process_var(char *s, int i, char **env);
 void	add_redirect(char *s, t_args *args);
 
 void	print_args(t_args *args)
@@ -142,7 +141,7 @@ void	add_red(char *s, int *i, int *start, int *red, t_args *args)
 	*red = 0;
 }
 
-t_args	*parse_line(t_args *args, char *s, char **env)
+t_args	*parse_line(t_args *args, char *s)
 {
 	t_s_escape state_e;
 	t_s_parser state_p;
@@ -183,13 +182,6 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 				state_p = DOUBLE_Q;
 			else if (c == '\'')
 				state_p = SINGLE_Q;
-	//		else if (c == '$')
-	//		{
-	//			s = process_var(s, i, env);
-	//			if (s == NULL)
-	//				break;
-	//			i--;
-	//		}
 			else if ((c == '|' || c == ';'))
 			{
 				red == 0 ? arg = add_arg(s, &i, &start, arg) : add_red(s, &i, &start, &red, args);
@@ -221,6 +213,6 @@ t_args	*parse_line(t_args *args, char *s, char **env)
 		if (c == '\0')
 			break;
 	}
-//	 print_args(head);
+	print_args(head);
 	return (head);
 }
