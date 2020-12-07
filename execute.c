@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 20:14:24 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/07 17:59:32 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,39 @@ void    ft_fork(char **args, t_env **env)
 	}
 }
 
+int	set_redirect(t_args *args)
+{
+	t_red	*cur;
+	int fd;
+
+	cur = &args->red;
+	while(cur + 1 != NULL)
+	{
+		fd = open(cur->file, O_CREAT | O_TRUNC | O_RDWR, 0644);
+		close(fd);
+		cur = cur->next;
+	}
+	if (cur->red == 1)
+		fd = open(cur->file, O_CREAT | O_TRUNC | O_RDWR, 0644);
+	else if (cur->red == 2)
+		fd = open(cur->file, O_CREAT | O_APPEND | O_RDWR, 0644);
+	else if (cur->red == 3)
+		fd = open(cur->file, O_CREAT | O_TRUNC | O_RDWR, 0644);
+	else if (cur->red == 4)
+		fd = open(cur->file, O_CREAT | O_APPEND | O_RDWR, 0644);
+	return (fd);
+}
+
 
 void	execute_command(t_args *args, t_env **env)
 {
 	char *line;
+	int	fd_redir;
 	line = args->arg[0];
-
+	if (args->red != NULL)
+	{
+		fd_redir = set_redirect(args);
+	}
 
 	if (!(ft_strncmp(line, "echo", 4)))
 		ft_echo(args->arg);
