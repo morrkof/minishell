@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/06 22:16:19 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/08 21:08:38 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,9 +158,10 @@ void    ft_fork(char **args, t_env **env)
 void	execute_command(t_args *args, t_env ***env)
 {
 	char *line;
+	
 	line = args->arg[0];
-
-
+	if (line == NULL)
+		return;
 	if (!(ft_strncmp(line, "echo", 4 + 1)))
 		ft_echo(args->arg);
 	else if (!(ft_strncmp(line, "pwd", 3 + 1)))

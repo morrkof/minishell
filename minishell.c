@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 20:12:21 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/07 19:44:35 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/08 21:11:45 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ void	hello()
 	free(pwd);
 }
 
+int		g_res;
+char	*g_line;
+
 void	hello_sigquit()
 {
 	write(1,"\b\b  \b\b", 6);
@@ -82,12 +85,14 @@ void	hello_sigint()
 {
 	write(1, "\n", 1);
 	SIG_IGN;
+	g_res = 0;
+	free(g_line);
+	g_line = ft_strdup(" ");
 	hello();
 }
 
-int main(int ac, char **av, char **env, int res)
+int main(int ac, char **av, char **env)
 {
-	char	*line;
 	t_args	args; // это отправим в парсер
 	t_args	*cur;
 	t_env	**env_var2 = NULL;
@@ -96,16 +101,22 @@ int main(int ac, char **av, char **env, int res)
 	(void)ac;
 	(void)av;	
 	env_var2 = char_to_struct(env);
-	res = 1;
+	g_res = 1;
 	while (1)
 	{
 		signal(SIGINT, hello_sigint);
 		signal(SIGQUIT, hello_sigquit);
-		res == 0 ? 0 : hello();//приглашение ввода
-		res = get_next_line(0, &line); // считываем строку из stdin
-		if (res == 0)
+		g_res == 0 ? 0 : hello();//приглашение ввода
+		g_res = get_next_line(0, &g_line); // считываем строку из stdin
+		if (g_res == 0 && ft_strlen(g_line) == 0)
+		{	
+			write(1, "\n", 1);
+			exit(0);
+		}
+		else if (g_res == 0 && ft_strlen(g_line) != 0)
 			continue;
-		parse_line(&args, line); // тут будет парсер
+		
+		parse_line(&args, g_line); // тут будет парсер
 		cur = &args;
 		while (cur != NULL)
 		{
@@ -113,7 +124,7 @@ int main(int ac, char **av, char **env, int res)
 			execute_command(cur, &env_var2);	// сюда структура должна попасть уже заполненной
 			cur = cur->next;
 		}
-		free(line);
+		free(g_line);
 	}
 	return (0);
 }

@@ -26,7 +26,7 @@ void	print_2d_char(char **array, char c)
 	
 	while (*array != NULL)
 	{
-		printf("%s%c", *array, c);
+		printf(">%s<%c", *array, c);
 		array++;
 	}
 	printf("\n");
@@ -153,7 +153,7 @@ t_args	*parse_line(t_args *args, char *s)
 	int			red;
 
 	args_init(args);
-	args->prev = NULL;
+	//args->prev = NULL;
 	arg = args->arg;
 	state_p = NON_Q;
 	state_e = NONESCAPED;
@@ -213,6 +213,7 @@ t_args	*parse_line(t_args *args, char *s)
 		if (c == '\0')
 			break;
 	}
-	print_args(head);
+//	printf("line = >%s<\n", s);
+//	print_args(head);
 	return (head);
 }
