@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 20:12:21 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/07 15:19:32 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/13 20:49:32 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,11 @@ int main(int ac, char **av, char **env)
 	char	*pwd;
 	
 	(void)ac;
-	(void)av;	
+	(void)av;
+	g_status = 0;
 	// env_var = copy_array(env_var, env);
 	env_var2 = char_to_struct(env);
-	//print_2d_char(env, '\n');
+	// print_2d_char(struct_to_char(env_var2), '\n');
 	// printf("%s\n", (get_env(env_var2, "PATH"))->val);
 	// set_env(env_var2, "PATH", "blabla");
 	// printf("%s\n", (get_env(env_var2, "PATH"))->val);

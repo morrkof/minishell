@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 01:54:56 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/07 17:59:32 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/13 20:53:41 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,17 @@ void	ft_echo(char **args)
 
 	flag = 0;
 	i = 1;
-	if(!(ft_strncmp(args[1], "-n", 2)))
+	if(!(ft_strncmp(args[1], "-n", 3)))
 	{
 		flag = 1;
 		i = 2;
 	}
 	while (args[i] != 0)
 	{
-		write(1, args[i], ft_strlen(args[i]));
+		if (!(ft_strncmp(args[i], "$?", 2)))
+			write(1, ft_itoa(g_status), ft_strlen(ft_itoa(g_status)));
+		else
+			write(1, args[i], ft_strlen(args[i]));
 		if (args[i + 1] != 0)
 			write(1, " ", 1);
 		i++;
@@ -80,6 +83,7 @@ void	ft_pwd()
 	write (1, buf, ft_strlen(buf));
 	write(1, "\n", 1);
 	free(buf);
+	g_status = 0;
 }
 
 char	*get_path(char *command, char *path)
@@ -117,25 +121,39 @@ char	*get_path(char *command, char *path)
 	return("errorp");
 }
 
-void    ft_fork(char **args, t_env **env)
+void    ft_fork(t_args *arg, t_env **env)
 {
     pid_t pid;
     pid_t wpid;
     int status;
+	static int pipefd[2];
+	int savefd1;
+	int savefd0;
+	char **args = arg->arg;
 	char *abs_path;
 	char *tmp;
 	char *exec_path;
 
+	if (arg->flag_in_pipe)
+	{
+		savefd0 = dup(0);
+		dup2(pipefd[0], 0);
+	}
+	if (arg->flag_out_pipe)
+	{
+		pipe(pipefd);
+		savefd1 = dup(1);
+		dup2(pipefd[1], 1);	
+	}
     (void)wpid;
 	exec_path = args[0];
-	if(!(ft_strchr(args[0], '/')))
+	if (!(ft_strchr(args[0], '/')))
 	{
 		abs_path = get_path(args[0], (get_env(env, "PATH"))->val);
 		tmp = ft_strjoin(abs_path, "/");
 		exec_path = ft_strjoin(tmp, args[0]);
 	}
 	pid = fork();
-	// printf("command - %s \nargument %s\n", exec_path, args[0]);
     if (pid == 0) // это дочка
 	{
 		if (execve(exec_path, args, struct_to_char(env)) == -1)
@@ -148,60 +166,101 @@ void    ft_fork(char **args, t_env **env)
 			perror ("errorg");
 	else // это родитель
 	{
-		do {
-			wpid = waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		while (wpid = waitpid(pid, &status, WUNTRACED))
+		{
+			if (WIFEXITED(status) || WIFSIGNALED(status))
+				break ;
+		}
+		g_status = WEXITSTATUS(status);
+	}
+	if (arg->flag_in_pipe)
+	{
+		close(pipefd[0]);
+		dup2(savefd0, 0);
+	}
+	if (arg->flag_out_pipe)
+	{
+		close(pipefd[1]);
+		dup2(savefd1, 1);	
 	}
 }
 
-int	set_redirect(t_args *args)
+void	set_redirect(t_args *args, t_red **last0, t_red **last1)
 {
 	t_red	*cur;
-	int fd;
+	int fd = -1;
 
-	cur = &args->red;
-	while(cur + 1 != NULL)
+	cur = args->red;
+	while(cur != NULL)
 	{
-		fd = open(cur->file, O_CREAT | O_TRUNC | O_RDWR, 0644);
-		close(fd);
+		if (cur->red == 1 || cur->red == 2)
+		{
+			*last1 = cur;
+			fd = open(cur->file, O_CREAT | O_RDWR, 0644);
+			close(fd);
+		}
+		else
+			*last0 = cur;
 		cur = cur->next;
 	}
-	if (cur->red == 1)
-		fd = open(cur->file, O_CREAT | O_TRUNC | O_RDWR, 0644);
-	else if (cur->red == 2)
-		fd = open(cur->file, O_CREAT | O_APPEND | O_RDWR, 0644);
-	else if (cur->red == 3)
-		fd = open(cur->file, O_CREAT | O_TRUNC | O_RDWR, 0644);
-	else if (cur->red == 4)
-		fd = open(cur->file, O_CREAT | O_APPEND | O_RDWR, 0644);
-	return (fd);
 }
 
 
 void	execute_command(t_args *args, t_env **env)
 {
-	char *line;
-	int	fd_redir;
-	line = args->arg[0];
+	t_red *last0; // read FROM file
+	t_red *last1; // write IN file
+	int	save_redir0;
+	int	save_redir1;
+	int fd0;
+	int fd1;
+	int flag = 0;
+	if (args->flag_in_pipe || args->flag_out_pipe)
+		flag = 1;
 	if (args->red != NULL)
 	{
-		fd_redir = set_redirect(args);
+		last0 = NULL;
+		last1 = NULL;
+		set_redirect(args, &last0, &last1);
+		if(last1 != NULL)
+		{
+			save_redir1 = dup(1);
+			close(1);
+			if (last1->red == 1)
+				fd1 = open(last1->file, O_CREAT | O_TRUNC | O_RDWR, 0644);
+			else if (last1->red == 2)
+				fd1 = open(last1->file, O_CREAT | O_APPEND | O_RDWR, 0644);
+		}
+		if (last0 != NULL)
+		{
+			save_redir0 = dup(0);
+			close(0);
+			fd0 = open(last0->file,  O_RDONLY);
+		}	
 	}
 
-	if (!(ft_strncmp(line, "echo", 4)))
+	if (!(ft_strncmp(args->arg[0], "echo", 4)) && !flag)
 		ft_echo(args->arg);
-	else if (!(ft_strncmp(line, "pwd", 3)))
+	else if (!(ft_strncmp(args->arg[0], "pwd", 3)) && !flag)
 		ft_pwd();
-	else if (!(ft_strncmp(line, "cd", 2)))
+	else if (!(ft_strncmp(args->arg[0], "cd", 2)) && !flag)
 		ft_cd(args->arg, env);
-	else if (!(ft_strncmp(line, "export", 6)))
+	else if (!(ft_strncmp(args->arg[0], "export", 6)) && !flag)
 		printf("check export\n");
-	else if (!(ft_strncmp(line, "unset", 5)))
+	else if (!(ft_strncmp(args->arg[0], "unset", 5)) && !flag)
 		printf("check unset\n");
-	else if (!(ft_strncmp(line, "env", 3)))
+	else if (!(ft_strncmp(args->arg[0], "env", 3)) && !flag)
 		printf("check env\n");
-	else if (!(ft_strncmp(line, "exit", 4)))
+	else if (!(ft_strncmp(args->arg[0], "exit", 4)) && !flag)
 		exit(0);
 	else
-		ft_fork(args->arg, env);
+		ft_fork(args, env);
+	if(last1 != NULL)
+	{
+		dup2(save_redir1, 1);
+	}
+	if(last0 != NULL)
+	{
+		dup2(save_redir0, 0);
+	}
 }

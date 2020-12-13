@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 15:17:15 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 01:45:27 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/13 20:40:43 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <dirent.h>
+
+int g_status;
 
 typedef	struct		s_env
 {
@@ -54,7 +56,7 @@ typedef enum		e_sEscape
 	NONESCAPED
 }					t_s_escape;
 
-typedef enum		sParser
+typedef enum		e_sParser
 {
 	DOUBLE_Q,
 	SINGLE_Q,
