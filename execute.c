@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:19:32 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/13 21:22:31 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/13 21:55:17 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,17 +245,17 @@ void	execute_command(t_args *args, t_env ***env)
 	else if (!(ft_strncmp(args->arg[0], "pwd", 3 + 1)) && !flag)
 		ft_pwd();
 	else if (!(ft_strncmp(args->arg[0], "cd", 2 + 1)) && !flag)
-		ft_cd(args->arg, env);
+		ft_cd(args->arg, *env);
 	else if (!(ft_strncmp(args->arg[0], "export", 6 + 1)) && !flag)
-		printf("check export\n");
+		*env = msh_export(*env, args->arg);
 	else if (!(ft_strncmp(args->arg[0], "unset", 5 + 1)) && !flag)
-		printf("check unset\n");
+		msh_unset(*env, args->arg);
 	else if (!(ft_strncmp(args->arg[0], "env", 3 + 1)) && !flag)
-		printf("check env\n");
+		msh_env(*env);
 	else if (!(ft_strncmp(args->arg[0], "exit", 4 + 1)) && !flag)
 		exit(0);
 	else
-		ft_fork(args, env);
+		ft_fork(args, *env);
 	if(last1 != NULL)
 	{
 		dup2(save_redir1, 1);
