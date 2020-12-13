@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/04 20:12:21 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/08 21:11:45 by miphigen         ###   ########.fr       */
+/*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
+/*   Updated: 2020/12/13 21:26:04 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -72,8 +73,7 @@ void	hello()
 	free(pwd);
 }
 
-int		g_res;
-char	*g_line;
+
 
 void	hello_sigquit()
 {
@@ -99,9 +99,11 @@ int main(int ac, char **av, char **env)
 	char	*pwd;
 
 	(void)ac;
-	(void)av;	
-	env_var2 = char_to_struct(env);
+	(void)av;
+	g_status = 0;
 	g_res = 1;
+	env_var2 = char_to_struct(env);
+
 	while (1)
 	{
 		signal(SIGINT, hello_sigint);

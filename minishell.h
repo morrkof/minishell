@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/26 15:17:15 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/07 12:37:55 by miphigen         ###   ########.fr       */
+/*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
+/*   Updated: 2020/12/13 21:24:53 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 #include <sys/wait.h>
 #include <dirent.h>
 #include <signal.h>
+
+int g_status;
+int		g_res;
+char	*g_line;
 
 typedef	struct		s_env
 {
@@ -55,7 +59,7 @@ typedef enum		e_sEscape
 	NONESCAPED
 }					t_s_escape;
 
-typedef enum		sParser
+typedef enum		e_sParser
 {
 	DOUBLE_Q,
 	SINGLE_Q,
