@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/17 12:46:45 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/17 13:41:12 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,27 +75,30 @@ void	swap(t_env **a, t_env **b)
 	*b = c;
 }
 
-void	sort(t_env	**env)
+t_env	**sort(t_env ***env_ptr)
 {
-	int	i;
-	int	j;
-	int	size;
+	int		i;
+	int		j;
+	int		size;
+	t_env	**env;
 
+	env = *env_ptr;
 	size = 0;
 	while (env[size] != NULL)
 		size++;
 	i = size;
 	while (i > 0)
 	{
-		j = 0;
-		while (j < i - 1)
+		j = -1;
+		while (++j < i - 1)
 		{
 			if (more(env[j], env[j + 1]))
 				swap(&env[j],&env[j + 1]);
-			j++;
 		}
 		i--;
 	}
+	*env_ptr = env;
+
 }
 
 void	env_alph_order(t_env **env)
@@ -108,7 +111,7 @@ void	env_alph_order(t_env **env)
 		i++;	
 	copy = malloc(sizeof(t_env *) * (i + 1));
 	copy = copy_env_ptrs(copy, env);
-	sort(copy);
+	sort(&copy);
 	i = -1;
 	while (env[++i] != NULL)
 	{
@@ -123,8 +126,6 @@ void	env_alph_order(t_env **env)
 		write(1, "\n", 1);
 	}
 	free(copy);
-	
-
 }
 
 t_env	**msh_export(t_env **env, char **arr)

@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/13 21:26:04 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/17 13:35:29 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	**struct_to_char(t_env **src)
 
 }
 
-void	hello()
+void	hello(void)
 {
 	char	*pwd;
 	
@@ -75,13 +75,13 @@ void	hello()
 
 
 
-void	hello_sigquit()
+void	hello_sigquit(void)
 {
 	write(1,"\b\b  \b\b", 6);
 	SIG_IGN;
 }
 
-void	hello_sigint()
+void	hello_sigint(void)
 {
 	write(1, "\n", 1);
 	SIG_IGN;
