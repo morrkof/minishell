@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ppipes <student.21-school.ru>              +#+  +:+       +#+         #
+#    By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#*   Updated: 2020/12/06 22:51:00 by miphigen         ###   ########.fr       *#
+#    Updated: 2020/12/17 13:23:32 by ppipes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,6 @@ fclean: clean
 	$(MAKE) -C ./libft fclean
 	rm -rf $(NAME)
 re: fclean all
-start: 	all
+start: 	re
 		./minishell
 empty: 
