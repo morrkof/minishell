@@ -176,6 +176,8 @@ t_args	*parse_line(t_args *args, char *s)
 
 		if (state_p == DOUBLE_Q && c == '\"')
 				state_p = NON_Q;
+		else if (state_p == SINGLE_Q && c == '\'')
+				state_p = NON_Q;
 		else if (state_p == NON_Q)
 		{
 			if (c == '"')

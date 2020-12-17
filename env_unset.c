@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:42:50 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/06 22:43:31 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/17 12:51:38 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	msh_env(t_env **env)
 	{
 		if (env[i]->name == NULL)
 		{	
-			//puts("NULL!");
 			continue;
 		}
 		write(1, env[i]->name, ft_strlen(env[i]->name));
@@ -38,6 +37,8 @@ void	msh_unset(t_env **env, char **arr)
 	size_t	len;
 
 	s = arr[1];
+	if (arr[1] == NULL)
+		return ;
 	i = -1;
 	while (env[++i] != NULL)
 	{
