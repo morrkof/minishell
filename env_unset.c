@@ -1,14 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env_unset.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/25 21:42:50 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/17 12:51:38 by miphigen         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -28,6 +18,7 @@ void	msh_env(t_env **env)
 		write(1, env[i]->val, ft_strlen(env[i]->val));
 		write(1, "\n", 1);
 	}
+	set_env(env, "?", "0");
 }
 
 void	msh_unset(t_env **env, char **arr)
@@ -56,4 +47,5 @@ void	msh_unset(t_env **env, char **arr)
 			break;
 		}
 	}
+	set_env(env, "?", "0");
 }
