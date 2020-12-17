@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/17 14:21:23 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:22:12 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,7 @@ void	hello(void)
 	free(pwd);
 }
 
-<<<<<<< HEAD
-
-
-void	hello_sigquit(void)
-=======
 void	hello_sigquit()
->>>>>>> 1c56e1156f5ad6ec9e95d7358059b681756a8a19
 {
 	write(1, "\b\b  \b\b", 6);
 	SIG_IGN;

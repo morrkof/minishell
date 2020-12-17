@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/17 13:41:12 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/17 15:12:25 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +75,12 @@ void	swap(t_env **a, t_env **b)
 	*b = c;
 }
 
-t_env	**sort(t_env ***env_ptr)
+void	sort(t_env **env)
 {
 	int		i;
 	int		j;
 	int		size;
-	t_env	**env;
 
-	env = *env_ptr;
 	size = 0;
 	while (env[size] != NULL)
 		size++;
@@ -98,8 +95,6 @@ t_env	**sort(t_env ***env_ptr)
 		}
 		i--;
 	}
-	*env_ptr = env;
-
 }
 
 void	env_alph_order(t_env **env)
@@ -112,18 +107,18 @@ void	env_alph_order(t_env **env)
 		i++;	
 	copy = malloc(sizeof(t_env *) * (i + 1));
 	copy = copy_env_ptrs(copy, env);
-	sort(&copy);
+	sort(copy);
 	i = -1;
-	while (env[++i] != NULL)
+	while (copy[++i] != NULL)
 	{
-		if (env[i]->name == NULL)
+		if (copy[i]->name == NULL)
 		{	
 			continue;
 		}
 		write(1, "declare -x ", 11);
-		write(1, env[i]->name, ft_strlen(env[i]->name));
+		write(1, copy[i]->name, ft_strlen(copy[i]->name));
 		write(1, "=", 1);
-		write(1, env[i]->val, ft_strlen(env[i]->val));
+		write(1, copy[i]->val, ft_strlen(copy[i]->val));
 		write(1, "\n", 1);
 	}
 	free(copy);
@@ -141,6 +136,8 @@ t_env	**msh_export(t_env **env, char **arr)
 		return (env);
 	}
 	temp = split_arg(arr[1]);
+	if (ft_strlen(temp->name) == 0 || ft_strlen(temp->val) == 0)
+		return (env);
 	i = -1;
 	while (env[++i] != NULL)
 	{	
