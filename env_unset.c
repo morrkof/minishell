@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 21:42:50 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/06 22:43:31 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/16 20:36:02 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	msh_env(t_env **env)
 		write(1, env[i]->val, ft_strlen(env[i]->val));
 		write(1, "\n", 1);
 	}
+	set_env(env, "?", "0");
 }
 
 void	msh_unset(t_env **env, char **arr)
@@ -55,4 +56,5 @@ void	msh_unset(t_env **env, char **arr)
 			break;
 		}
 	}
+	set_env(env, "?", "0");
 }

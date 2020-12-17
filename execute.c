@@ -6,34 +6,41 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:19:32 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/13 21:55:17 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/17 13:28:01 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		ft_exit()
+int		ft_exit(t_env **env, t_args *args)
 {
-	return (0);
+	int status;
+
+	if (args->arg[1] != NULL)
+		status = ft_atoi(args->arg[1]);
+	else
+		status = 0;
+	set_env(env, "?", ft_itoa(status));
+	exit (status);
 }
 
-void	ft_echo(char **args)
+void	ft_echo(char **args, t_env **env)
 {
 	int i;
 	int flag;
 
 	flag = 0;
 	i = 1;
-	if(!(ft_strncmp(args[1], "-n", 3)))
+	if(args[1] != NULL && !(ft_strncmp(args[1], "-n", 3)))
 	{
 		flag = 1;
 		i = 2;
 	}
 	while (args[i] != 0)
 	{
-		if (!(ft_strncmp(args[i], "$?", 2)))
-			write(1, ft_itoa(g_status), ft_strlen(ft_itoa(g_status)));
-		else
+		// if (!(ft_strncmp(args[i], "$?", 2)))
+		// 	write(1, ft_itoa(g_status), ft_strlen(ft_itoa(g_status)));
+		// else
 			write(1, args[i], ft_strlen(args[i]));
 		if (args[i + 1] != 0)
 			write(1, " ", 1);
@@ -41,12 +48,22 @@ void	ft_echo(char **args)
 	}
 	if (!flag)
 		write(1, "\n", 1);
+	set_env(env, "?", "0");
 }
 
 void    ft_cd(char **args, t_env **env)
 {
-    chdir(args[1]);
-	set_env(env, "PWD", getcwd(NULL, 0));
+    if (chdir(args[1]))
+	{
+		write(2, strerror(errno), ft_strlen(strerror(errno)));
+		write(2, "\n", 1);
+		set_env(env, "?", ft_itoa(errno));
+	}
+	else
+	{
+		set_env(env, "PWD", getcwd(NULL, 0));
+		set_env(env, "?", "0");
+	}
 }
 
 t_env	*get_env(t_env **env, char *name)
@@ -73,9 +90,7 @@ int		set_env(t_env **env, char *name, char *val)
 	// сделать return 
 }
 
-
-
-void	ft_pwd()
+void	ft_pwd(t_env **env)
 {
 	char *buf;
 
@@ -83,7 +98,8 @@ void	ft_pwd()
 	write (1, buf, ft_strlen(buf));
 	write(1, "\n", 1);
 	free(buf);
-	g_status = 0;
+	// g_status = 0;
+	set_env(env, "?", "0");
 }
 
 char	*get_path(char *command, char *path)
@@ -126,7 +142,8 @@ void    ft_fork(t_args *arg, t_env **env)
     pid_t pid;
     pid_t wpid;
     int status;
-	static int pipefd[2];
+	static int saved;
+	int pipefd[2];
 	int savefd1;
 	int savefd0;
 	char **args = arg->arg;
@@ -137,15 +154,20 @@ void    ft_fork(t_args *arg, t_env **env)
 	if (arg->flag_in_pipe)
 	{
 		savefd0 = dup(0);
-		dup2(pipefd[0], 0);
+		dup2(saved, 0);
+		close(saved);
+		//printf("BEFORE IN COM %s IN %d OUT %d pipefd0 %d pipefd1 %d\n",arg->arg[0], arg->flag_in_pipe,arg->flag_out_pipe,pipefd[0],pipefd[1]);
 	}
 	if (arg->flag_out_pipe)
 	{
 		pipe(pipefd);
 		savefd1 = dup(1);
-		dup2(pipefd[1], 1);	
+		saved = pipefd[0];
+		dup2(pipefd[1], 1);
+		close(pipefd[1]);
+		// printf("BEFORE OUT COM %s IN %d OUT %d pipefd0 %d pipefd1 %d\n",arg->arg[0], arg->flag_in_pipe,arg->flag_out_pipe,pipefd[0],pipefd[1]);
 	}
-    (void)wpid;
+	(void)wpid;
 	exec_path = args[0];
 	if (!(ft_strchr(args[0], '/')))
 	{
@@ -166,22 +188,26 @@ void    ft_fork(t_args *arg, t_env **env)
 			perror ("errorg");
 	else // это родитель
 	{
+		// printf ("parent %d %d %s\n",arg->flag_in_pipe,arg->flag_out_pipe,arg->arg[0]);
 		while (wpid = waitpid(pid, &status, WUNTRACED))
 		{
 			if (WIFEXITED(status) || WIFSIGNALED(status))
 				break ;
 		}
-		g_status = WEXITSTATUS(status);
+		set_env(env, "?", ft_itoa(WEXITSTATUS(status)));
+		// g_status = WEXITSTATUS(status);
 	}
 	if (arg->flag_in_pipe)
 	{
-		close(pipefd[0]);
 		dup2(savefd0, 0);
+		close(savefd0);
+		// printf("AFTER IN COM %s IN %d OUT %d pipefd0 %d pipefd1 %d\n",arg->arg[0], arg->flag_in_pipe,arg->flag_out_pipe,pipefd[0],pipefd[1]);
 	}
 	if (arg->flag_out_pipe)
 	{
-		close(pipefd[1]);
-		dup2(savefd1, 1);	
+		dup2(savefd1, 1);
+		close(savefd1);
+		// printf("AFTER OUT COM %s IN %d OUT %d pipefd0 %d pipefd1 %d\n",arg->arg[0], arg->flag_in_pipe,arg->flag_out_pipe,pipefd[0],pipefd[1]);
 	}
 }
 
@@ -241,9 +267,9 @@ void	execute_command(t_args *args, t_env ***env)
 	if (args->arg[0] == NULL)
 		return;
 	if (!(ft_strncmp(args->arg[0], "echo", 4 + 1)) && !flag)
-		ft_echo(args->arg);
+		ft_echo(args->arg, *env);
 	else if (!(ft_strncmp(args->arg[0], "pwd", 3 + 1)) && !flag)
-		ft_pwd();
+		ft_pwd(*env);
 	else if (!(ft_strncmp(args->arg[0], "cd", 2 + 1)) && !flag)
 		ft_cd(args->arg, *env);
 	else if (!(ft_strncmp(args->arg[0], "export", 6 + 1)) && !flag)
@@ -253,7 +279,7 @@ void	execute_command(t_args *args, t_env ***env)
 	else if (!(ft_strncmp(args->arg[0], "env", 3 + 1)) && !flag)
 		msh_env(*env);
 	else if (!(ft_strncmp(args->arg[0], "exit", 4 + 1)) && !flag)
-		exit(0);
+		ft_exit(*env, args);
 	else
 		ft_fork(args, *env);
 	if(last1 != NULL)

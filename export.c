@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/06 22:43:15 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/16 23:47:59 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ t_env	**msh_export(t_env **env, char **arr)
 
 	copy[i] = temp;
 	free(env);
+	set_env(copy, "?", "0");
 	return (copy);
 }
 

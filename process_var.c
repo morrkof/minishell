@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_process_var.c                               :+:      :+:    :+:   */
+/*   process_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:52:40 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/06 22:48:57 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/16 23:27:16 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*process_var(char *s, int i, char **env)
 	return (ret_value);
 	
 }
-void	process_variables(t_args *args, char **env_var2)
+void	process_variables(t_args *args, char **env_var)
 {
 	char	**arr;
 	char	*s;
@@ -88,7 +88,7 @@ void	process_variables(t_args *args, char **env_var2)
 		{
 			if (s[j] == '$')
 			{
-				s = process_var(s, j, env_var2);
+				s = process_var(s, j, env_var);
 				j--;
 				arr[i] = s;
 				if (s == NULL)
