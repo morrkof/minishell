@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:19:32 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/17 13:28:01 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/18 15:07:41 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 int		ft_exit(t_env **env, t_args *args)
 {
 	int status;
+	char *res;
 
 	if (args->arg[1] != NULL)
 		status = ft_atoi(args->arg[1]);
 	else
 		status = 0;
-	set_env(env, "?", ft_itoa(status));
+	res = ft_itoa(status);
+	set_env(env, "?", res);
+	free(res);
 	exit (status);
 }
 
@@ -31,16 +34,13 @@ void	ft_echo(char **args, t_env **env)
 
 	flag = 0;
 	i = 1;
-	if(args[1] != NULL && !(ft_strncmp(args[1], "-n", 3)))
+	while (args[i] != NULL && !(ft_strncmp(args[i], "-n", 3)))
 	{
 		flag = 1;
-		i = 2;
+		i++;
 	}
 	while (args[i] != 0)
 	{
-		// if (!(ft_strncmp(args[i], "$?", 2)))
-		// 	write(1, ft_itoa(g_status), ft_strlen(ft_itoa(g_status)));
-		// else
 			write(1, args[i], ft_strlen(args[i]));
 		if (args[i + 1] != 0)
 			write(1, " ", 1);
@@ -53,17 +53,18 @@ void	ft_echo(char **args, t_env **env)
 
 void    ft_cd(char **args, t_env **env)
 {
-    if (chdir(args[1]))
+	int		status;
+	char	*res;
+
+    if (status = chdir(args[1]))
 	{
 		write(2, strerror(errno), ft_strlen(strerror(errno)));
 		write(2, "\n", 1);
-		set_env(env, "?", ft_itoa(errno));
 	}
-	else
-	{
-		set_env(env, "PWD", getcwd(NULL, 0));
-		set_env(env, "?", "0");
-	}
+	res = ft_itoa(status * -1);
+	set_env(env, "PWD", getcwd(NULL, 0));
+	set_env(env, "?", res);
+	free(res);
 }
 
 t_env	*get_env(t_env **env, char *name)
@@ -98,7 +99,6 @@ void	ft_pwd(t_env **env)
 	write (1, buf, ft_strlen(buf));
 	write(1, "\n", 1);
 	free(buf);
-	// g_status = 0;
 	set_env(env, "?", "0");
 }
 
@@ -129,15 +129,15 @@ char	*get_path(char *command, char *path)
 				closedir(dir);
 				return(paths[i]);
 			}
-			// printf("%s\n", ent->d_name);
 		}
 		closedir(dir);
 		i++;
 	}
-	return("errorp");
+	
+	return(NULL);
 }
 
-void    ft_fork(t_args *arg, t_env **env)
+int    ft_fork(t_args *arg, t_env **env)
 {
     pid_t pid;
     pid_t wpid;
@@ -146,7 +146,6 @@ void    ft_fork(t_args *arg, t_env **env)
 	int pipefd[2];
 	int savefd1;
 	int savefd0;
-	char **args = arg->arg;
 	char *abs_path;
 	char *tmp;
 	char *exec_path;
@@ -156,7 +155,6 @@ void    ft_fork(t_args *arg, t_env **env)
 		savefd0 = dup(0);
 		dup2(saved, 0);
 		close(saved);
-		//printf("BEFORE IN COM %s IN %d OUT %d pipefd0 %d pipefd1 %d\n",arg->arg[0], arg->flag_in_pipe,arg->flag_out_pipe,pipefd[0],pipefd[1]);
 	}
 	if (arg->flag_out_pipe)
 	{
@@ -165,20 +163,26 @@ void    ft_fork(t_args *arg, t_env **env)
 		saved = pipefd[0];
 		dup2(pipefd[1], 1);
 		close(pipefd[1]);
-		// printf("BEFORE OUT COM %s IN %d OUT %d pipefd0 %d pipefd1 %d\n",arg->arg[0], arg->flag_in_pipe,arg->flag_out_pipe,pipefd[0],pipefd[1]);
 	}
 	(void)wpid;
-	exec_path = args[0];
-	if (!(ft_strchr(args[0], '/')))
+	exec_path = arg->arg[0];
+	if (!(ft_strchr(arg->arg[0], '/')))
 	{
-		abs_path = get_path(args[0], (get_env(env, "PATH"))->val);
+		abs_path = get_path(arg->arg[0], (get_env(env, "PATH"))->val);
+		if (abs_path == NULL)
+		{
+			write(2, arg->arg[0], ft_strlen(arg->arg[0]));
+			write(2, ": command not found\n", ft_strlen(": command not found\n"));
+			set_env(env, "?", "127");
+			return (1);
+		}
 		tmp = ft_strjoin(abs_path, "/");
-		exec_path = ft_strjoin(tmp, args[0]);
+		exec_path = ft_strjoin(tmp, arg->arg[0]);
 	}
 	pid = fork();
     if (pid == 0) // это дочка
 	{
-		if (execve(exec_path, args, struct_to_char(env)) == -1)
+		if (execve(exec_path, arg->arg, struct_to_char(env)) == -1)
 		{
 			perror ("error");
 			exit (-1);
@@ -188,26 +192,22 @@ void    ft_fork(t_args *arg, t_env **env)
 			perror ("errorg");
 	else // это родитель
 	{
-		// printf ("parent %d %d %s\n",arg->flag_in_pipe,arg->flag_out_pipe,arg->arg[0]);
 		while (wpid = waitpid(pid, &status, WUNTRACED))
 		{
 			if (WIFEXITED(status) || WIFSIGNALED(status))
 				break ;
 		}
 		set_env(env, "?", ft_itoa(WEXITSTATUS(status)));
-		// g_status = WEXITSTATUS(status);
 	}
 	if (arg->flag_in_pipe)
 	{
 		dup2(savefd0, 0);
 		close(savefd0);
-		// printf("AFTER IN COM %s IN %d OUT %d pipefd0 %d pipefd1 %d\n",arg->arg[0], arg->flag_in_pipe,arg->flag_out_pipe,pipefd[0],pipefd[1]);
 	}
 	if (arg->flag_out_pipe)
 	{
 		dup2(savefd1, 1);
 		close(savefd1);
-		// printf("AFTER OUT COM %s IN %d OUT %d pipefd0 %d pipefd1 %d\n",arg->arg[0], arg->flag_in_pipe,arg->flag_out_pipe,pipefd[0],pipefd[1]);
 	}
 }
 
@@ -266,19 +266,19 @@ void	execute_command(t_args *args, t_env ***env)
 	}
 	if (args->arg[0] == NULL)
 		return;
-	if (!(ft_strncmp(args->arg[0], "echo", 4 + 1)) && !flag)
+	if (!(ft_strncmp(args->arg[0], "echo", 5)) && !flag)
 		ft_echo(args->arg, *env);
-	else if (!(ft_strncmp(args->arg[0], "pwd", 3 + 1)) && !flag)
+	else if (!(ft_strncmp(args->arg[0], "pwd", 4)) && !flag)
 		ft_pwd(*env);
-	else if (!(ft_strncmp(args->arg[0], "cd", 2 + 1)) && !flag)
+	else if (!(ft_strncmp(args->arg[0], "cd", 3)) && !flag)
 		ft_cd(args->arg, *env);
-	else if (!(ft_strncmp(args->arg[0], "export", 6 + 1)) && !flag)
+	else if (!(ft_strncmp(args->arg[0], "export", 7)) && !flag)
 		*env = msh_export(*env, args->arg);
-	else if (!(ft_strncmp(args->arg[0], "unset", 5 + 1)) && !flag)
+	else if (!(ft_strncmp(args->arg[0], "unset", 6)) && !flag)
 		msh_unset(*env, args->arg);
-	else if (!(ft_strncmp(args->arg[0], "env", 3 + 1)) && !flag)
+	else if (!(ft_strncmp(args->arg[0], "env", 4)) && !flag)
 		msh_env(*env);
-	else if (!(ft_strncmp(args->arg[0], "exit", 4 + 1)) && !flag)
+	else if (!(ft_strncmp(args->arg[0], "exit", 5)) && !flag)
 		ft_exit(*env, args);
 	else
 		ft_fork(args, *env);

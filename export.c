@@ -100,16 +100,16 @@ void	env_alph_order(t_env **env)
 	copy = copy_env_ptrs(copy, env);
 	sort(copy);
 	i = -1;
-	while (env[++i] != NULL)
+	while (copy[++i] != NULL)
 	{
-		if (env[i]->name == NULL)
+		if (copy[i]->name == NULL)
 		{	
 			continue;
 		}
 		write(1, "declare -x ", 11);
-		write(1, env[i]->name, ft_strlen(env[i]->name));
+		write(1, copy[i]->name, ft_strlen(copy[i]->name));
 		write(1, "=", 1);
-		write(1, env[i]->val, ft_strlen(env[i]->val));
+		write(1, copy[i]->val, ft_strlen(copy[i]->val));
 		write(1, "\n", 1);
 	}
 	free(copy);
