@@ -60,9 +60,8 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	{
 		c = s[start];
 		if (c != '\'' && c != '\"')
-		{
+//		if (c != '\"')
 			substr[i++] = c;	
-		}
 		start++;
 	}
 	substr[i] = '\0';
@@ -216,6 +215,6 @@ t_args	*parse_line(t_args *args, char *s)
 			break;
 	}
 //	printf("line = >%s<\n", s);
-//	print_args(head);
+	print_args(head);
 	return (head);
 }
