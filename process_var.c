@@ -76,7 +76,7 @@ void	process_variables(t_args *args, char **env)
 		s = arr[i];
 		while (s[++j] != '\0')
 		{
-			if (s[j] == '$')
+			if (s[j] == '$' && s[j + 1] != '?')
 			{
 				s = process_var(s, j, env);
 				j--;

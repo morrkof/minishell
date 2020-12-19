@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 23:44:02 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/17 00:03:26 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/19 16:04:23 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ void	free_2d_env (t_env **env)
 	free(env);
 }
 
-void	free_red(t_red **red)
+void	free_red(t_red *red)
 {
 	t_red	*cur;
 	t_red	*next;
 
-	cur = *red;
+	cur = red;
 	while(cur != NULL)
 	{
 		free(cur->file);
@@ -60,13 +60,16 @@ void	free_args(t_args *args)
 	t_args	*cur;
 	t_args	*next;
 
-	cur = &args;
+	cur = args;
+	free_2d_array(cur->arg);
+	free_red(cur->red);
+	cur = cur->next;
 	while(cur != NULL)
 	{
 		free_2d_array(cur->arg);
 		free_red(cur->red);
-
+		next = cur->next;
 		free(cur);
-		cur = cur->next;
+		cur = next;
 	}
 }

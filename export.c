@@ -143,7 +143,7 @@ t_env	**msh_export(t_env **env, char **arr)
 
 	copy[i] = temp;
 	free(env);
-	set_env(copy, "?", "0");
+	// set_env(&copy, "?", "0");
+	g_status = 0;
 	return (copy);
 }
-

@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:19:32 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/18 15:07:41 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/19 16:15:29 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,26 @@
 
 int		ft_exit(t_env **env, t_args *args)
 {
-	int status;
-	char *res;
+	// int status;
+	// char *res;
 
 	if (args->arg[1] != NULL)
-		status = ft_atoi(args->arg[1]);
+		g_status = ft_atoi(args->arg[1]);
 	else
-		status = 0;
-	res = ft_itoa(status);
-	set_env(env, "?", res);
-	free(res);
-	exit (status);
+		g_status = 0;
+	// res = ft_itoa(status);
+	// // set_env(&env, "?", res);
+	// free(res);
+	free_2d_env(env);
+	free_args(args);
+	exit (g_status);
 }
 
 void	ft_echo(char **args, t_env **env)
 {
 	int i;
 	int flag;
+	char *stat;
 
 	flag = 0;
 	i = 1;
@@ -41,6 +44,13 @@ void	ft_echo(char **args, t_env **env)
 	}
 	while (args[i] != 0)
 	{
+		if (!(ft_strcmp(args[i], "$?")))
+		{
+			stat = ft_itoa(g_status);
+			write(1, stat, ft_strlen(stat));
+			free (stat);
+		}
+		else
 			write(1, args[i], ft_strlen(args[i]));
 		if (args[i + 1] != 0)
 			write(1, " ", 1);
@@ -48,47 +58,54 @@ void	ft_echo(char **args, t_env **env)
 	}
 	if (!flag)
 		write(1, "\n", 1);
-	set_env(env, "?", "0");
+	g_status = 0;
+	// set_env(&env, "?", "0");
 }
 
 void    ft_cd(char **args, t_env **env)
 {
-	int		status;
-	char	*res;
+	// int		status;
+	// char	*res;
 
-    if (status = chdir(args[1]))
+    if (g_status = chdir(args[1]) * -1)
 	{
 		write(2, strerror(errno), ft_strlen(strerror(errno)));
 		write(2, "\n", 1);
 	}
-	res = ft_itoa(status * -1);
-	set_env(env, "PWD", getcwd(NULL, 0));
-	set_env(env, "?", res);
-	free(res);
+	// res = ft_itoa(status * -1);
+	set_env(&env, "PWD", getcwd(NULL, 0));
+	// set_env(&env, "?", res);
+	// free(res);
 }
 
 t_env	*get_env(t_env **env, char *name)
 {
 	while(*env)
 	{
-		if(!(ft_strncmp((*env)->name, name, ft_strlen(name))))
-			return(*env);
+		if ((*env)->name)
+		{
+			if(!(ft_strncmp((*env)->name, name, ft_strlen(name))))
+				return(*env);
+		}
 		env++;
 	}
 	return (NULL);
 }
 
-int		set_env(t_env **env, char *name, char *val)
+void		set_env(t_env ***env, char *name, char *val)
 {
-	t_env *tmp;
+	t_env	*tmp;
+	char	**arr;
 
-	if(tmp = get_env(env, name))
+	if(tmp = get_env(*env, name))
 	{
 		free(tmp->val);
 		tmp->val = ft_strdup(val);
 	}
-	// else - добавить переменную
-	// сделать return 
+	else
+	{
+		*env = set_new_env(*env, name, val);
+	}
 }
 
 void	ft_pwd(t_env **env)
@@ -99,7 +116,8 @@ void	ft_pwd(t_env **env)
 	write (1, buf, ft_strlen(buf));
 	write(1, "\n", 1);
 	free(buf);
-	set_env(env, "?", "0");
+	// set_env(&env, "?", "0");
+	g_status = 0;
 }
 
 char	*get_path(char *command, char *path)
@@ -173,7 +191,8 @@ int    ft_fork(t_args *arg, t_env **env)
 		{
 			write(2, arg->arg[0], ft_strlen(arg->arg[0]));
 			write(2, ": command not found\n", ft_strlen(": command not found\n"));
-			set_env(env, "?", "127");
+			// set_env(&env, "?", "127");
+			g_status = 127;
 			return (1);
 		}
 		tmp = ft_strjoin(abs_path, "/");
@@ -197,7 +216,8 @@ int    ft_fork(t_args *arg, t_env **env)
 			if (WIFEXITED(status) || WIFSIGNALED(status))
 				break ;
 		}
-		set_env(env, "?", ft_itoa(WEXITSTATUS(status)));
+		// set_env(&env, "?", ft_itoa(WEXITSTATUS(status)));
+		g_status = WEXITSTATUS(status);
 	}
 	if (arg->flag_in_pipe)
 	{

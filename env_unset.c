@@ -18,12 +18,14 @@ void	msh_env(t_env **env)
 		write(1, env[i]->val, ft_strlen(env[i]->val));
 		write(1, "\n", 1);
 	}
-	set_env(env, "?", "0");
+	// set_env(&env, "?", "0");
+	g_status = 0;
 }
 
 void	msh_unset(t_env **env, char **arr)
 {
 	int		i;
+	int		res;
 	char	*s;
 	size_t	len;
 
@@ -35,10 +37,9 @@ void	msh_unset(t_env **env, char **arr)
 	{
 		if (env[i]->name == NULL)
 			continue;
-		len = ft_strlen(s) > ft_strlen(env[i]->name) ? ft_strlen(s) :
-			ft_strlen(env[i]->name);
-		int res = ft_strncmp(s, env[i]->name, len);
-		if (res == 0)
+		// len = ft_strlen(s) > ft_strlen(env[i]->name) ? ft_strlen(s) :
+		// 	ft_strlen(env[i]->name);
+		if (!(res = ft_strcmp(s, env[i]->name)))
 		{
 			free(env[i]->name);
 			env[i]->name = NULL;
@@ -47,5 +48,6 @@ void	msh_unset(t_env **env, char **arr)
 			break;
 		}
 	}
-	set_env(env, "?", "0");
+	// set_env(&env, "?", "0");
+	g_status = 0;
 }
