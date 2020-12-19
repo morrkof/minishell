@@ -69,6 +69,8 @@ void	process_variables(t_args *args, char **env)
 	int		j;
 
 	arr = args->arg;
+	if (args->sq_flag != 0)
+		return;
 	i = -1;
 	while (arr[++i] != NULL)
 	{

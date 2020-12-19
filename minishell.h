@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/17 13:23:24 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/19 18:50:29 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct		s_args
 	int				flag_in_pipe;// если пайп слева, то = 1
 	struct s_args	*next;
 	struct s_args	*prev;
+	int				sq_flag;
 }					t_args;
 
 typedef enum		e_sEscape
