@@ -58,7 +58,7 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	j = 0;
 	while (j++ < len && s[start] != '\0')
 	{
-		c = s[start];
+			c = s[start];
 		if (c != '\'' && c != '\"')
 //		if (c != '\"')
 			substr[i++] = c;	
@@ -152,7 +152,8 @@ t_args	*parse_line(t_args *args, char *s)
 	int			red;
 
 	args_init(args);
-	//args->prev = NULL;
+	if (ft_strchr(s, '\''))
+		args->sq_flag = 1;
 	arg = args->arg;
 	state_p = NON_Q;
 	state_e = NONESCAPED;
@@ -185,14 +186,17 @@ t_args	*parse_line(t_args *args, char *s)
 				state_p = SINGLE_Q;
 			else if ((c == '|' || c == ';'))
 			{
-				red == 0 ? arg = add_arg(s, &i, &start, arg) : add_red(s, &i, &start, &red, args);
+				red == 0 ? arg = add_arg(s, &i, &start, arg) :
+					add_red(s, &i, &start, &red, args);
 				args = add_command(args, c, &arg);
 			}
 			else if ((ft_isspace(c) || c == '\n' || c == '\0'))
-				red == 0 ? arg = add_arg(s, &i, &start, arg) : add_red(s, &i, &start, &red, args);
+				red == 0 ? arg = add_arg(s, &i, &start, arg) :
+					add_red(s, &i, &start, &red, args);
 			else if ((c == '<' || c == '>'))
 			{
-				red == 0 ? arg = add_arg(s, &i, &start, arg) : add_red(s, &i, &start, &red, args);
+				red == 0 ? arg = add_arg(s, &i, &start, arg) :
+					add_red(s, &i, &start, &red, args);
 				if (c == '<' && s[i + 1] == '<')
 				{	
 					red = 4;
