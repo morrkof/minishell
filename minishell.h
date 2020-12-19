@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/19 18:50:29 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/19 19:32:54 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <dirent.h>
 # include <signal.h>
 
+int					g_status;
 int					g_res;
 char				*g_line;
 
@@ -72,7 +73,7 @@ t_args				*parse_line(t_args *args, char *line);
 void				print_2d_char(char **array, char c);
 void				execute_command(t_args *args, t_env ***env);
 t_env				*get_env(t_env **env, char *name);
-int					set_env(t_env **env, char *name, char *val);
+void				set_env(t_env ***env, char *name, char *val);
 char				**struct_to_char(t_env **src);
 t_env				**char_to_struct(char **src);
 char				*get_path(char *command, char *path);
@@ -83,10 +84,12 @@ t_env				**msh_export(t_env **env, char **arr);
 t_env				**copy_env(t_env **dst, t_env **src);
 t_env				*split_arg(char *s);
 t_env				**msh_export(t_env **env, char **arr);
+t_env				**set_new_env(t_env **src, char *name, char *val);
 void				free_t_env(t_env *env);
-// void				free_2d_array(char **arr);
-// void				free_2d_env (t_env **env);
-// void				free_red(t_red **red);
-// void				free_args(t_args *args);
+void				free_2d_array(char **arr);
+void				free_2d_env (t_env **env);
+void				free_red(t_red *red);
+void				free_args(t_args *args);
+int		ft_exit(t_env **env, t_args *args);
 
 #endif

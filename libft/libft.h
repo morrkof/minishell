@@ -6,13 +6,13 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 23:28:33 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/04 02:13:35 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/19 17:14:24 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# define BUFFER_SIZE 32
+# define BUFFER_SIZE 1
 
 # include <stdlib.h>
 # include <unistd.h>

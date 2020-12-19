@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/17 14:22:12 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/19 19:32:46 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,11 @@ void	hello_sigint(void)
 	SIG_IGN;
 	g_res = 0;
 	free(g_line);
-	g_line = ft_strdup(" ");
+	g_line = ft_strdup("");
 	hello();
 }
 
-t_env	**init_exit_status(t_env **src)
+t_env	**set_new_env(t_env **src, char *name, char *val)
 {
 	t_env	*tmp;
 	t_env	**copy;
@@ -94,15 +94,15 @@ t_env	**init_exit_status(t_env **src)
 
 	i = 0;
 	tmp = malloc(sizeof(t_env));
-	tmp->name = ft_strdup("?");
-	tmp->val = ft_strdup("0");
+	tmp->name = ft_strdup(name);
+	tmp->val = ft_strdup(val);
 	while (src[i] != NULL)
 		i++;
 	copy = malloc(sizeof(t_env *) * (i + 2));
 	copy = copy_env(copy, src);
 	copy[i] = tmp;
 	copy[i + 1] = NULL;
-	free(src);
+	// free(src);
 	return (copy);
 }
 
@@ -112,12 +112,14 @@ int		main(int ac, char **av, char **env)
 	t_args	*cur;
 	t_env	**env_var;
 	char	*pwd;
+	char **tmp;
 
 	(void)ac;
 	(void)av;
 	g_res = 1;
-	env_var = NULL;
-	env_var = init_exit_status(char_to_struct(env));
+	g_status = 0;
+	env_var = char_to_struct(env);
+	// env_var = set_new_env(char_to_struct(env), "?", "0");
 	while (1)
 	{
 		signal(SIGINT, hello_sigint);
@@ -127,19 +129,28 @@ int		main(int ac, char **av, char **env)
 		if (g_res == 0 && ft_strlen(g_line) == 0)
 		{
 			write(1, "\n", 1);
+			free(g_line);
 			exit(0);
 		}
 		else if (g_res == 0 && ft_strlen(g_line) != 0)
+		{
+			// free(g_line);
 			continue;
+		}
 		parse_line(&args, g_line);
+		free(g_line);
 		cur = &args;
 		while (cur != NULL)
 		{
-			process_variables(cur, struct_to_char(env_var));
+			tmp = struct_to_char(env_var);
+			process_variables(cur, tmp);
+			free_2d_array(tmp);
 			execute_command(cur, &env_var);
 			cur = cur->next;
 		}
-		free(g_line);
+		free_args(&args);
+		
 	}
+	free_2d_env(env_var);
 	return (0);
 }

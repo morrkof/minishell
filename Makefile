@@ -6,12 +6,12 @@
 #    By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#    Updated: 2020/12/17 13:23:32 by ppipes           ###   ########.fr        #
+#    Updated: 2020/12/19 15:58:25 by ppipes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-SRC = minishell.c parser.c process_var.c execute.c env_unset.c export.c
+SRC = minishell.c parser.c process_var.c execute.c env_unset.c export.c free.c
 HEADER = ./minishell.h
 OBJ = $(SRC:.c=.o)
 CFLAGS = -g #-Wall -Wextra -Werror
