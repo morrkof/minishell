@@ -41,6 +41,7 @@ void	args_init(t_args *args)
 	args->red = NULL;
 	args->arg = malloc(sizeof(char *) * 100);
 	args->arg[0] = NULL;
+	args->sq_flag = 0;
 }
 
 char	*msh_substr(char *s, unsigned int start, size_t len)
@@ -59,9 +60,14 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	while (j++ < len && s[start] != '\0')
 	{
 			c = s[start];
-		if (c != '\'' && c != '\"')
-//		if (c != '\"')
-			substr[i++] = c;	
+		if (c == '\\')
+		{
+			substr[i++] = s[++start];
+		}
+		else if (c != '\'' && c != '\"')
+		{	
+			substr[i++] = c;
+		}
 		start++;
 	}
 	substr[i] = '\0';
@@ -106,7 +112,6 @@ t_red	*red_init(t_red *red)
 	red->file = NULL;
 	red->next = NULL;
 	red->prev = NULL;
-
 	return (red);
 }
 
@@ -219,6 +224,6 @@ t_args	*parse_line(t_args *args, char *s)
 			break;
 	}
 //	printf("line = >%s<\n", s);
-	print_args(head);
+//	print_args(head);
 	return (head);
 }

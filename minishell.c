@@ -6,7 +6,7 @@
 /*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/19 19:43:46 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/20 15:31:31 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,12 @@ int		main(int ac, char **av, char **env)
 		{
 			write(1, "\n", 1);
 			free(g_line);
-			free_args(&args);
+		//	free_args(&args);
 			exit(0);
 		}
 		else if (g_res == 0 && ft_strlen(g_line) != 0)
 		{
-			// free(g_line);
+			//free(g_line);
 			continue;
 		}
 		parse_line(&args, g_line);

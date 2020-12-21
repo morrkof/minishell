@@ -37,8 +37,6 @@ void	msh_unset(t_env **env, char **arr)
 	{
 		if (env[i]->name == NULL)
 			continue;
-		// len = ft_strlen(s) > ft_strlen(env[i]->name) ? ft_strlen(s) :
-		// 	ft_strlen(env[i]->name);
 		if (!(res = ft_strcmp(s, env[i]->name)))
 		{
 			free(env[i]->name);

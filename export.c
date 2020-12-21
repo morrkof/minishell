@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/17 15:12:25 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/20 14:48:46 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,10 @@ t_env	**copy_env_ptrs(t_env **dest, t_env **src)
 
 int	more(t_env *lhs, t_env *rhs)
 {
+	if (lhs->name == NULL || rhs == NULL)
+	{
+		return (1);
+	}
 	if (ft_strcmp(lhs->name, rhs->name) > 0)
 		return (1);
 	else
@@ -90,7 +94,7 @@ void	sort(t_env **env)
 		j = -1;
 		while (++j < i - 1)
 		{
-			if (more(env[j], env[j + 1]))
+			if (env[j]->name == NULL || env[j + 1] -> name == NULL || more(env[j], env[j + 1]))
 				swap(&env[j],&env[j + 1]);
 		}
 		i--;
@@ -141,7 +145,7 @@ t_env	**msh_export(t_env **env, char **arr)
 	i = -1;
 	while (env[++i] != NULL)
 	{	
-		if (ft_strcmp(env[i]->name, temp->name) == 0)
+		if (env[i]->name != NULL && ft_strcmp(env[i]->name, temp->name) == 0)
 		{	
 			env[i]->val = ft_strdup(temp->val);
 			return (env);
@@ -152,7 +156,6 @@ t_env	**msh_export(t_env **env, char **arr)
 
 	copy[i] = temp;
 	free(env);
-	// set_env(&copy, "?", "0");
 	g_status = 0;
 	return (copy);
 }
