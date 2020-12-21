@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 23:44:02 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/19 16:04:23 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/21 14:45:14 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	free_red(t_red *red)
 	t_red	*next;
 
 	cur = red;
-	while(cur != NULL)
+	while (cur != NULL)
 	{
 		free(cur->file);
 		next = cur->next;
@@ -64,7 +64,7 @@ void	free_args(t_args *args)
 	free_2d_array(cur->arg);
 	free_red(cur->red);
 	cur = cur->next;
-	while(cur != NULL)
+	while (cur != NULL)
 	{
 		free_2d_array(cur->arg);
 		free_red(cur->red);

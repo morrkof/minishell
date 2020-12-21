@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/19 19:43:46 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/21 15:02:43 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	hello_sigquit()
 	SIG_IGN;
 }
 
-void	hello_sigint(void)
+void	hello_sigint()
 {
 	write(1, "\n", 1);
 	SIG_IGN;
@@ -111,7 +111,6 @@ int		main(int ac, char **av, char **env)
 	t_args	args;
 	t_args	*cur;
 	t_env	**env_var;
-	char	*pwd;
 	char **tmp;
 
 	(void)ac;
@@ -119,7 +118,6 @@ int		main(int ac, char **av, char **env)
 	g_res = 1;
 	g_status = 0;
 	env_var = char_to_struct(env);
-	// env_var = set_new_env(char_to_struct(env), "?", "0");
 	while (1)
 	{
 		signal(SIGINT, hello_sigint);
@@ -135,7 +133,6 @@ int		main(int ac, char **av, char **env)
 		}
 		else if (g_res == 0 && ft_strlen(g_line) != 0)
 		{
-			// free(g_line);
 			continue;
 		}
 		parse_line(&args, g_line);
@@ -150,7 +147,6 @@ int		main(int ac, char **av, char **env)
 			cur = cur->next;
 		}
 		free_args(&args);
-		
 	}
 	free_2d_env(env_var);
 	return (0);
