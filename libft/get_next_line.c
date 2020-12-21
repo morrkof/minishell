@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 14:49:29 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/21 13:49:02 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/21 15:43:47 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static char	*ft_strjoin2(char *s1, char *s2)
 	int		i;
 	int		j;
 
-	result = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!(result = malloc(ft_strlen(s1) + ft_strlen(s2) + 1)))
+		return (NULL);
 	i = 0;
 	while (s1[i] != '\0')
 	{
@@ -46,8 +47,10 @@ int			get_next_line(int fd, char **line)
 	result = 1;
 	if (!line)
 		return (0);
-	buf = malloc(2);
-	*line = malloc(1);
+	if ((buf = malloc(2)) == NULL)
+		return (-1);
+	if ((*line = malloc(1)) == NULL)
+		return (-1);
 	**line = '\0';
 	*buf = '\0';
 	while (*buf != '\n' && result)

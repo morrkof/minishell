@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/21 15:02:43 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/21 15:45:22 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ int		main(int ac, char **av, char **env)
 		{
 			write(1, "\n", 1);
 			free(g_line);
-			free_args(&args);
 			exit(0);
 		}
 		else if (g_res == 0 && ft_strlen(g_line) != 0)
