@@ -6,126 +6,60 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 14:49:29 by ppipes            #+#    #+#             */
-/*   Updated: 2020/10/25 14:30:21 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/21 15:43:47 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*write_tail(char **line, char *buf, int *is_tail)
+static char	*ft_strjoin2(char *s1, char *s2)
 {
-	char	*head;
-	char	*dest;
+	char	*result;
+	int		i;
+	int		j;
 
-	if (!(head = write_head(buf)))
-	{
-		free(*line);
-		*line = NULL;
-		free(buf);
+	if (!(result = malloc(ft_strlen(s1) + ft_strlen(s2) + 1)))
 		return (NULL);
-	}
-	if (!(*line = gnl_strjoin(*line, head)))
-	{
-		free(buf);
-		return (NULL);
-	}
-	free(head);
-	if (!(dest = gnl_strdup(buf)))
-	{
-		free(*line);
-		*line = NULL;
-		return (NULL);
-	}
-	*is_tail = 1;
-	return (dest);
-}
-
-char	*write_head(char *buf)
-{
-	size_t	i;
-	char	*head;
-	size_t	lenbuf;
-
 	i = 0;
-	lenbuf = gnl_strlen(buf, '\n');
-	if (!(head = malloc(sizeof(char) * (lenbuf + 1))))
-		return (NULL);
-	while (i < lenbuf)
+	while (s1[i] != '\0')
 	{
-		head[i] = buf[i];
+		result[i] = s1[i];
 		i++;
 	}
-	head[i] = '\0';
-	return (head);
+	j = 0;
+	while (s2[j] != '\0')
+	{
+		result[i] = s2[j];
+		i++;
+		j++;
+	}
+	result[i] = '\0';
+	free(s1);
+	s1 = NULL;
+	return (result);
 }
 
-int		read_buf(int fd, int *result, char **line, char **buf)
+int			get_next_line(int fd, char **line)
 {
-	if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-	{
-		free(*line);
-		*line = NULL;
-		return (0);
-	}
-	if ((*result = read(fd, *buf, BUFFER_SIZE)) == -1)
-	{
-		free(*line);
-		*line = NULL;
-		free(*buf);
-		return (0);
-	}
-	*(*buf + *result) = '\0';
-	while (!(gnl_strchr(*buf, '\n')) && *result > 0)
-	{
-		if (!(*line = gnl_strjoin(*line, *buf)))
-			return (0);
-		if (!(*result = read(fd, *buf, BUFFER_SIZE)))
-			return (1);
-		*(*buf + *result) = '\0';
-	}
-	return (2);
-}
+	char	*buf;
+	int		result;
 
-int		process_tail(char **line, char **tail, int *is_tail)
-{
-	if (gnl_strchr(*tail, '\n'))
-	{
-		if (!(*tail = write_tail(line, *tail, is_tail)))
-			return (0);
-		return (1);
-	}
-	if (!(*line = gnl_strjoin(*line, *tail)))
+	result = 1;
+	if (!line)
 		return (0);
-	free(*tail);
-	*is_tail = 0;
-	return (2);
-}
-
-int		get_next_line(int fd, char **line)
-{
-	char		*buf;
-	static char	*tail;
-	static int	is_tail;
-	int			result;
-
-	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line = malloc(sizeof(char))))
+	if ((buf = malloc(2)) == NULL)
+		return (-1);
+	if ((*line = malloc(1)) == NULL)
 		return (-1);
 	**line = '\0';
-	if (is_tail)
+	*buf = '\0';
+	while (*buf != '\n' && result)
 	{
-		if (!(result = process_tail(line, &tail, &is_tail)))
-			return (-1);
-		if (result == 1)
-			return (1);
+		result = read(fd, buf, 1);
+		buf[1] = '\0';
+		if (*buf != '\n' && result)
+			*line = ft_strjoin2(*line, buf);
 	}
-	if (!(read_buf(fd, &result, line, &buf)))
-		return (-1);
-	if (gnl_strchr(buf, '\n') && !(tail = write_tail(line, buf, &is_tail)))
-		return (-1);
-	if (!result)
-	{
-		free(buf);
-		return (0);
-	}
-	return (1);
+	free(buf);
+	return (result);
 }

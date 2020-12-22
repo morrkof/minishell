@@ -6,13 +6,13 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 23:28:33 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/19 17:14:24 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/20 00:02:30 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 32
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -71,14 +71,6 @@ void			ft_lstiter(t_list *lst, void (*f)(void *));
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void *), \
 				void (*del)(void *));
 int				get_next_line(int fd, char **line);
-size_t			gnl_strlen(const char *s, const char c);
-char			*gnl_strchr(const char *s, int c);
-char			*gnl_strdup(const char *s);
-char			*gnl_strjoin(char *s1, char *s2);
-char			*write_tail(char **line, char *buf, int *is_tail);
-int				read_buf(int fd, int *result, char **line, char **buf);
-int				process_tail(char **line, char **tail, int *is_tail);
-char			*write_head(char *buf);
 void			ft_strcpy(char *dst, char *src);
 int				ft_strcmp(char *s1, char *s2);
 #endif

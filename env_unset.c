@@ -25,7 +25,6 @@ void	msh_unset(t_env **env, char **arr)
 	int		i;
 	int		res;
 	char	*s;
-	size_t	len;
 
 	s = arr[1];
 	if (arr[1] == NULL)
