@@ -1,5 +1,4 @@
 
-
 #include "minishell.h"
 
 void	msh_env(t_env **env)
@@ -10,7 +9,7 @@ void	msh_env(t_env **env)
 	while (env[++i] != NULL)
 	{
 		if (env[i]->name == NULL)
-		{	
+		{
 			continue;
 		}
 		write(1, env[i]->name, ft_strlen(env[i]->name));
@@ -18,7 +17,6 @@ void	msh_env(t_env **env)
 		write(1, env[i]->val, ft_strlen(env[i]->val));
 		write(1, "\n", 1);
 	}
-	// set_env(&env, "?", "0");
 	g_status = 0;
 }
 
@@ -43,9 +41,8 @@ void	msh_unset(t_env **env, char **arr)
 			env[i]->name = NULL;
 			free(env[i]->val);
 			env[i]->val = NULL;
-			break;
+			break ;
 		}
 	}
-	// set_env(&env, "?", "0");
 	g_status = 0;
 }

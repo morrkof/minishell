@@ -85,7 +85,7 @@ char	**add_arg(char *s, int *i, int *start, char **arr)
 		arr++;
 		*arr = NULL;
 	}
-	while (s[*i + 1] == ' ')
+	while (s[*i] != '\0' && ft_isspace(s[*i + 1]))
 		(*i)++;
 	*start = *i + 1;
 	return (arr);

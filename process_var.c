@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process_var.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: miphigen <miphigen@student.21-school.ru    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/22 12:15:20 by miphigen          #+#    #+#             */
+/*   Updated: 2020/12/22 12:15:57 by miphigen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -17,10 +27,10 @@ char	*ret_value(char **env, char *var, int *size)
 			s = ft_substr(s, *size + 1, ft_strlen(s) - *size);
 			return (s);
 		}
-		 free(variable);
+		free(variable);
 		env++;
-	}	
-	return NULL;
+	}
+	return (NULL);
 }
 
 char	*get_value(char *s, int i, char **env, int *size)
@@ -35,9 +45,9 @@ char	*get_value(char *s, int i, char **env, int *size)
 	{
 		var = ft_substr(s, i + 1, j);
 		val = ret_value(env, var, size);
-		 free(var);
+		free(var);
 		if (val != NULL)
-			break;
+			break ;
 		j++;
 	}
 	return (val);
@@ -70,7 +80,7 @@ void	process_variables(t_args *args, char **env)
 
 	arr = args->arg;
 	if (args->sq_flag != 0)
-		return;
+		return ;
 	i = -1;
 	while (arr[++i] != NULL)
 	{
@@ -86,7 +96,7 @@ void	process_variables(t_args *args, char **env)
 				if (s == NULL)
 				{
 					arr[i] = ft_strdup("");
-					break;
+					break ;
 				}
 			}
 		}

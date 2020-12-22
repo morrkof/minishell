@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/20 14:48:46 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/22 12:33:29 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	more(t_env *lhs, t_env *rhs)
 void	swap(t_env **a, t_env **b)
 {
 	t_env	*c;
-	
+
 	c = *a;
 	*a = *b;
 	*b = c;
@@ -94,8 +94,9 @@ void	sort(t_env **env)
 		j = -1;
 		while (++j < i - 1)
 		{
-			if (env[j]->name == NULL || env[j + 1] -> name == NULL || more(env[j], env[j + 1]))
-				swap(&env[j],&env[j + 1]);
+			if (env[j]->name == NULL || env[j + 1]->name == NULL ||
+				more(env[j], env[j + 1]))
+				swap(&env[j], &env[j + 1]);
 		}
 		i--;
 	}
@@ -108,7 +109,7 @@ void	env_alph_order(t_env **env)
 
 	i = 0;
 	while (env[i] != NULL)
-		i++;	
+		i++;
 	copy = malloc(sizeof(t_env *) * (i + 1));
 	copy = copy_env_ptrs(copy, env);
 	sort(copy);
@@ -116,7 +117,7 @@ void	env_alph_order(t_env **env)
 	while (copy[++i] != NULL)
 	{
 		if (copy[i]->name == NULL)
-		{	
+		{
 			continue;
 		}
 		write(1, "declare -x ", 11);
@@ -144,16 +145,15 @@ t_env	**msh_export(t_env **env, char **arr)
 		return (env);
 	i = -1;
 	while (env[++i] != NULL)
-	{	
+	{
 		if (env[i]->name != NULL && ft_strcmp(env[i]->name, temp->name) == 0)
-		{	
+		{
 			env[i]->val = ft_strdup(temp->val);
 			return (env);
 		}
 	}
 	copy = malloc(sizeof(t_env *) * (i + 2));
 	copy = copy_env(copy, env);
-
 	copy[i] = temp;
 	free(env);
 	g_status = 0;
