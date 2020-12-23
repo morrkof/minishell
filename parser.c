@@ -5,14 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: miphigen <miphigen@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/23 16:06:40 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/23 16:06:43 by miphigen         ###   ########.fr       */
+/*   Created: 2020/12/23 16:13:11 by miphigen          #+#    #+#             */
+/*   Updated: 2020/12/23 16:19:20 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	add_redirect(char *s, t_args *args);
 
 void	print_args(t_args *args)
 {
@@ -64,20 +62,20 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	size_t	j;
 
 	if (len == 0)
-		return NULL;
+		return (NULL);
 	if (!(substr = (char *)malloc(len + 1)))
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (j++ < len && s[start] != '\0')
 	{
-			c = s[start];
+		c = s[start];
 		if (c == '\\')
 		{
 			substr[i++] = s[++start];
 		}
 		else if (c != '\'' && c != '\"')
-		{	
+		{
 			substr[i++] = c;
 		}
 		start++;
@@ -86,7 +84,7 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	if (substr[0] != '\0')
 		return (substr);
 	free(substr);
-	return NULL;
+	return (NULL);
 }
 
 char	**add_arg(char *s, int *i, int *start, char **arr)
@@ -106,7 +104,7 @@ char	**add_arg(char *s, int *i, int *start, char **arr)
 t_args	*add_command(t_args *args, char c, char ***arg)
 {
 	if (c == '|')
-	args->flag_out_pipe = 1;
+		args->flag_out_pipe = 1;
 	args->next = malloc(sizeof(t_args));
 	args->next->prev = args;
 	args_init(args->next);
@@ -133,7 +131,7 @@ void	add_red(char *s, int *i, int *start, int *red, t_args *args)
 	t_red	*ptr;
 
 	if (!(str = msh_substr(s, *start, *i - *start)))
-	{	
+	{
 		(*start)++;
 		return ;
 	}
@@ -147,7 +145,7 @@ void	add_red(char *s, int *i, int *start, int *red, t_args *args)
 	{
 		ptr = args->red;
 		while (ptr->next != NULL)
-			ptr = ptr->next;		
+			ptr = ptr->next;
 		ptr->next = red_init(ptr->next);
 		ptr = ptr->next;
 	}
@@ -155,87 +153,4 @@ void	add_red(char *s, int *i, int *start, int *red, t_args *args)
 	ptr->file = ft_strtrim(str, " \t\r\n\f\v");
 	free(str);
 	*red = 0;
-}
-
-t_args	*parse_line(t_args *args, char *s)
-{
-	t_s_escape state_e;
-	t_s_parser state_p;
-	int			i;//
-	int			start;//
-	char		**arg;
-	char		c;//
-	t_args		*head = args;
-	int			red;
-
-	args_init(args);
-	if (ft_strchr(s, '\''))
-		args->sq_flag = 1;
-	arg = args->arg;
-	state_p = NON_Q;
-	state_e = NONESCAPED;
-	i = -1;
-	red = 0;
-	start = 0;
-	while (++i >= 0)
-	{
-		c = s[i];
-		if (state_e == NONESCAPED && c == '\\')
-		{	
-			state_e = ESCAPED;
-			continue;
-		}
-		else if (state_e == ESCAPED)
-		{
-			state_e = NONESCAPED;
-			continue;
-		}
-
-		if (state_p == DOUBLE_Q && c == '\"')
-				state_p = NON_Q;
-		else if (state_p == SINGLE_Q && c == '\'')
-				state_p = NON_Q;
-		else if (state_p == NON_Q)
-		{
-			if (c == '"')
-				state_p = DOUBLE_Q;
-			else if (c == '\'')
-				state_p = SINGLE_Q;
-			else if ((c == '|' || c == ';'))
-			{
-				red == 0 ? arg = add_arg(s, &i, &start, arg) :
-					add_red(s, &i, &start, &red, args);
-				args = add_command(args, c, &arg);
-			}
-			else if ((ft_isspace(c) || c == '\n' || c == '\0'))
-				red == 0 ? arg = add_arg(s, &i, &start, arg) :
-					add_red(s, &i, &start, &red, args);
-			else if ((c == '<' || c == '>'))
-			{
-				red == 0 ? arg = add_arg(s, &i, &start, arg) :
-					add_red(s, &i, &start, &red, args);
-				if (c == '<' && s[i + 1] == '<')
-				{	
-					red = 4;
-					i++;
-					start++;
-				}
-				else if (c == '>' && s[i + 1] == '>')
-				{	
-					red = 2;
-					i++;
-					start++;
-				}
-				else if (c == '<')
-					red = 3;
-				else if (c == '>')
-					red = 1;
-				}
-		}
-		if (c == '\0')
-			break;
-	}
-//	printf("line = >%s<\n", s);
-//	print_args(head);
-	return (head);
 }
