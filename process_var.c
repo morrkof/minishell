@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: miphigen <miphigen@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/22 12:15:20 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/22 12:15:57 by miphigen         ###   ########.fr       */
+/*   Created: 2020/12/23 10:53:47 by miphigen          #+#    #+#             */
+/*   Updated: 2020/12/23 10:56:35 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ char	*process_var(char *s, int i, char **env)
 	ft_memcpy(ret_value, s, i);
 	ft_memcpy(&ret_value[i], s2, ft_strlen(s2));
 	ret_value[i + ft_strlen(s2)] = '\0';
-	ft_strlcat(&ret_value[i + ft_strlen(s2)], &s[i + 1 + size], ft_strlen(s) - i);
+	ft_strlcat(&ret_value[i + ft_strlen(s2)], &s[i + 1 + size],
+		ft_strlen(s) - i);
 	free(s);
 	return (ret_value);
 }
@@ -74,7 +75,6 @@ char	*process_var(char *s, int i, char **env)
 void	process_variables(t_args *args, char **env)
 {
 	char	**arr;
-	char	*s;
 	int		i;
 	int		j;
 
@@ -85,20 +85,17 @@ void	process_variables(t_args *args, char **env)
 	while (arr[++i] != NULL)
 	{
 		j = -1;
-		s = arr[i];
-		while (s[++j] != '\0')
-		{
-			if (s[j] == '$' && s[j + 1] != '?')
+		while (arr[i][++j] != '\0')
+			if (arr[i][j] == '$' && arr[i][j + 1] != '?')
 			{
-				s = process_var(s, j, env);
+				arr[i] = process_var(arr[i], j, env);
 				j--;
-				arr[i] = s;
-				if (s == NULL)
+				arr[i] = arr[i];
+				if (arr[i] == NULL)
 				{
 					arr[i] = ft_strdup("");
 					break ;
 				}
 			}
-		}
 	}
 }

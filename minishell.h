@@ -6,7 +6,7 @@
 /*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/19 19:32:54 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/23 11:02:45 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void				free_2d_array(char **arr);
 void				free_2d_env (t_env **env);
 void				free_red(t_red *red);
 void				free_args(t_args *args);
-int		ft_exit(t_env **env, t_args *args);
+int					ft_exit(t_env **env, t_args *args);
+void				env_alph_order(t_env **env);
 
 #endif
