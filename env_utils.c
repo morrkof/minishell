@@ -6,11 +6,27 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 13:39:01 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/23 13:40:39 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 01:13:38 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		arrlen(t_env **src)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (src[i])
+	{
+		if (src[i]->name && src[i]->val)
+			j++;
+		i++;
+	}
+	return (j);
+}
 
 t_env	*get_env(t_env **env, char *name)
 {

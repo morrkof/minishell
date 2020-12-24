@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 18:52:01 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 01:13:49 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,5 +144,6 @@ void				add_red(char *s, t_local_vars *l, t_args *args, char *str);
 void				hello(void);
 void				hello_sigquit(int i);
 void				hello_sigint(int i);
+int					arrlen(t_env **src);
 
 #endif
