@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 01:43:16 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 01:46:14 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	interrupt(t_env **env)
 {
 	write(1, "\n", 1);
 	free_2d_env(env);
-	free(g_line);
 	exit(0);
 }
 
