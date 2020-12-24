@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 17:55:07 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/24 18:15:31 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,34 @@ char	**struct_to_char(t_env **src)
 	return (dest);
 }
 
+void	interrupt(t_env **env)
+{
+	write(1, "\n", 1);
+	free_2d_env(env);
+	free(g_line);
+	exit(0);
+}
+
+void	command_list(t_env **env, t_args *args)
+{
+	t_args	*cur;
+	char	**tmp;
+
+	cur = args;
+	while (cur != NULL)
+	{
+		tmp = struct_to_char(env);
+		process_variables(cur, tmp);
+		free_2d_array(tmp);
+		execute_command(cur, &env);
+		cur = cur->next;
+	}
+}
+
 int		main(int ac, char **av, char **env)
 {
 	t_args	args;
-	t_args	*cur;
 	t_env	**env_var;
-	char	**tmp;
 
 	(void)ac;
 	(void)av;
@@ -78,26 +100,12 @@ int		main(int ac, char **av, char **env)
 		g_res == 0 ? 0 : hello();
 		g_res = get_next_line(0, &g_line);
 		if (g_res == 0 && ft_strlen(g_line) == 0)
-		{
-			write(1, "\n", 1);
-			free_2d_env(env_var);
-			free(g_line);
-			free_args(&args);
-			exit(0);
-		}
+			interrupt(env_var);
 		else if (g_res == 0 && ft_strlen(g_line) != 0)
 			continue;
 		parse_line(&args, g_line);
 		free(g_line);
-		cur = &args;
-		while (cur != NULL)
-		{
-			tmp = struct_to_char(env_var);
-			process_variables(cur, tmp);
-			free_2d_array(tmp);
-			execute_command(cur, &env_var);
-			cur = cur->next;
-		}
+		command_list(env_var, &args);
 		free_args(&args);
 	}
 	free_2d_env(env_var);
