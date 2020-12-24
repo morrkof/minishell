@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 16:07:49 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/24 16:16:49 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef	struct		s_red
 	struct s_red	*next;
 }					t_red;
 
-typedef struct 		s_savefd
+typedef struct		s_savefd
 {
 	t_red			*last0;
 	t_red			*last1;
@@ -45,7 +45,7 @@ typedef struct 		s_savefd
 	int				redir1;
 }					t_savefd;
 
-typedef struct 		s_pipe
+typedef struct		s_pipe
 {
 	int				pipefd[2];
 	int				savefd0;
@@ -69,13 +69,13 @@ typedef struct		s_args
 	int				sq_flag;
 }					t_args;
 
-typedef enum		e_sEscape
+typedef enum		e_s_escape
 {
 	ESCAPED,
 	NONESCAPED
 }					t_s_escape;
 
-typedef enum		e_sParser
+typedef enum		e_s_parser
 {
 	DOUBLE_Q,
 	SINGLE_Q,
@@ -97,7 +97,8 @@ typedef struct		s_local_vars
 t_args				*parse_line(t_args *args, char *line);
 void				print_2d_char(char **array, char c);
 void				execute_command(t_args *args, t_env ***env);
-void				find_last_redirect(t_args *args, t_red **last0, t_red **last1);
+void				find_last_redirect(t_args *args, t_red **last0, \
+						t_red **last1);
 void				set_redirect(t_args *args, t_savefd *save);
 void				unset_redirect(t_savefd *save);
 t_env				*get_env(t_env **env, char *name);
