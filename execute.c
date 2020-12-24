@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:19:32 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 14:02:08 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/24 15:19:35 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,8 @@ void	execute_command(t_args *args, t_env ***env)
 	t_savefd	save;
 	int			flag;
 
-	flag = 0;
-	if (args->flag_in_pipe || args->flag_out_pipe)
-		flag = 1;
-	if (args->red != NULL)
-		set_redirect(args, &save);
+	flag = (args->flag_in_pipe || args->flag_out_pipe) ? 1 : 0;
+	args->red != NULL ? set_redirect(args, &save) : 0;
 	if (args->arg[0] == NULL)
 		return ;
 	if (!(ft_strncmp(args->arg[0], "echo", 5)) && !flag)
@@ -97,6 +94,5 @@ void	execute_command(t_args *args, t_env ***env)
 		ft_exit(*env, args);
 	else
 		ft_fork(args, *env, flag);
-	if (args->red != NULL)
-		unset_redirect(&save);
+	args->red != NULL ? unset_redirect(&save) : 0;
 }
