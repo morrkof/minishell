@@ -6,7 +6,7 @@
 #    By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#    Updated: 2020/12/24 18:30:40 by ppipes           ###   ########.fr        #
+#    Updated: 2020/12/25 02:11:22 by ppipes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
 ft_lstclear.c ft_lstiter.c ft_lstmap.c get_next_line.c \
 ft_isspace.c ft_is_in_set.c
 OBJ = $(SRC:.c=.o)
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 .PHONY: all clean fclean re bonus
 

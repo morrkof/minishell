@@ -6,7 +6,7 @@
 #    By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#*   Updated: 2020/12/24 16:27:35 by miphigen         ###   ########.fr       *#
+#    Updated: 2020/12/25 02:11:18 by ppipes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ parse_line.c add_red.c hello.c
 
 HEADER = ./minishell.h
 OBJ = $(SRC:.c=.o)
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 LIBFLAGS = -Llibft -lft
 LIBFT = ./libft/libft.a
 
@@ -38,6 +38,4 @@ fclean: clean
 	$(MAKE) -C ./libft fclean
 	rm -rf $(NAME)
 re: fclean all
-start: 	re
-		./minishell
 empty: 
