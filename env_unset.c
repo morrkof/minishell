@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_unset.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/22 00:32:02 by ppipes            #+#    #+#             */
+/*   Updated: 2020/12/22 00:32:31 by ppipes           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -10,7 +20,7 @@ void	msh_env(t_env **env)
 	while (env[++i] != NULL)
 	{
 		if (env[i]->name == NULL)
-		{	
+		{
 			continue;
 		}
 		write(1, env[i]->name, ft_strlen(env[i]->name));
@@ -41,7 +51,7 @@ void	msh_unset(t_env **env, char **arr)
 			env[i]->name = NULL;
 			free(env[i]->val);
 			env[i]->val = NULL;
-			break;
+			break ;
 		}
 	}
 	g_status = 0;
