@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 01:46:14 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 02:03:15 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ int		main(int ac, char **av, char **env)
 		g_res = get_next_line(0, &g_line);
 		if (g_res == 0 && ft_strlen(g_line) == 0)
 			interrupt(env_var);
-		else if (g_res == 0 && ft_strlen(g_line) != 0)
-			continue;
 		parse_line(&args, g_line);
 		free(g_line);
 		command_list(&env_var, &args);

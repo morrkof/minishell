@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 18:01:21 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 23:24:22 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 01:57:17 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int		ft_fork(t_args *arg, t_env **env, int flag)
 		g_status = WEXITSTATUS(status);
 	}
 	unset_pipes(arg, &pipes, flag);
-	free(path);
+	if (path != NULL && path != arg->arg[0])
+		free(path);
 	return (0);
 }
 
