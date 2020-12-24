@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 16:26:49 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/24 18:52:01 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,8 @@ void				set_redirect(t_args *args, t_savefd *save);
 void				unset_redirect(t_savefd *save);
 t_env				*get_env(t_env **env, char *name);
 void				set_env(t_env ***env, char *name, char *val);
-char				**struct_to_char(t_env **src);
-t_env				**char_to_struct(char **src);
+char				**str2ch(t_env **src);
+t_env				**ch2str(char **src);
 char				*get_path(char *command, char **paths);
 char				**split_paths(char *path);
 char				*add_current_path(char *path);
@@ -138,8 +138,8 @@ void				ft_echo(char **args);
 void				print_errno_error(void);
 int					ft_fork(t_args *arg, t_env **env, int flag);
 char				*find_exec_path(t_args *arg, t_env **env);
-void				set_pipes(t_args *arg, t_pipe *pipes);
-void				unset_pipes(t_args *arg, t_pipe *pipes);
+void				set_pipes(t_args *arg, t_pipe *pipes, int flag);
+void				unset_pipes(t_args *arg, t_pipe *pipes, int flag);
 void				add_red(char *s, t_local_vars *l, t_args *args, char *str);
 void				hello(void);
 void				hello_sigquit(int i);

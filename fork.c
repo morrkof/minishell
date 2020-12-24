@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 18:01:21 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 15:17:30 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/24 18:50:27 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ int		ft_fork(t_args *arg, t_env **env, int flag)
 	int		status;
 	char	*path;
 
-	if (flag)
-		set_pipes(arg, &pipes);
+	set_pipes(arg, &pipes, flag);
 	if ((path = find_exec_path(arg, env)) == NULL)
+	{
+		unset_pipes(arg, &pipes, flag);
 		return (-1);
+	}
 	pid = fork();
-	if (pid == 0 && (execve(path, arg->arg, struct_to_char(env)) == -1))
-		print_errno_error();
-	else if (pid < 0)
+	if ((pid == 0 && (execve(path, arg->arg, str2ch(env)) == -1)) || pid < 0)
 		print_errno_error();
 	else
 	{
@@ -35,8 +35,7 @@ int		ft_fork(t_args *arg, t_env **env, int flag)
 				break ;
 		g_status = WEXITSTATUS(status);
 	}
-	if (flag)
-		unset_pipes(arg, &pipes);
+	unset_pipes(arg, &pipes, flag);
 	return (0);
 }
 
@@ -68,37 +67,43 @@ char	*find_exec_path(t_args *arg, t_env **env)
 		return (arg->arg[0]);
 }
 
-void	set_pipes(t_args *arg, t_pipe *pipes)
+void	set_pipes(t_args *arg, t_pipe *pipes, int flag)
 {
 	static int saved;
 
-	if (arg->flag_in_pipe)
+	if (flag)
 	{
-		pipes->savefd0 = dup(0);
-		dup2(saved, 0);
-		close(saved);
-	}
-	if (arg->flag_out_pipe)
-	{
-		pipe(pipes->pipefd);
-		pipes->savefd1 = dup(1);
-		saved = pipes->pipefd[0];
-		dup2(pipes->pipefd[1], 1);
-		close(pipes->pipefd[1]);
+		if (arg->flag_in_pipe)
+		{
+			pipes->savefd0 = dup(0);
+			dup2(saved, 0);
+			close(saved);
+		}
+		if (arg->flag_out_pipe)
+		{
+			pipe(pipes->pipefd);
+			pipes->savefd1 = dup(1);
+			saved = pipes->pipefd[0];
+			dup2(pipes->pipefd[1], 1);
+			close(pipes->pipefd[1]);
+		}
 	}
 }
 
-void	unset_pipes(t_args *arg, t_pipe *pipes)
+void	unset_pipes(t_args *arg, t_pipe *pipes, int flag)
 {
-	if (arg->flag_in_pipe)
+	if (flag)
 	{
-		dup2(pipes->savefd0, 0);
-		close(pipes->savefd0);
-	}
-	if (arg->flag_out_pipe)
-	{
-		dup2(pipes->savefd1, 1);
-		close(pipes->savefd1);
+		if (arg->flag_in_pipe)
+		{
+			dup2(pipes->savefd0, 0);
+			close(pipes->savefd0);
+		}
+		if (arg->flag_out_pipe)
+		{
+			dup2(pipes->savefd1, 1);
+			close(pipes->savefd1);
+		}
 	}
 }
 

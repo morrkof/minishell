@@ -6,13 +6,13 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 18:15:31 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/24 18:54:05 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	**char_to_struct(char **src)
+t_env	**ch2str(char **src)
 {
 	t_env	**dest;
 	size_t	len;
@@ -36,7 +36,7 @@ t_env	**char_to_struct(char **src)
 	return (dest);
 }
 
-char	**struct_to_char(t_env **src)
+char	**str2ch(t_env **src)
 {
 	char	**dest;
 	char	*tmp;
@@ -75,7 +75,7 @@ void	command_list(t_env **env, t_args *args)
 	cur = args;
 	while (cur != NULL)
 	{
-		tmp = struct_to_char(env);
+		tmp = str2ch(env);
 		process_variables(cur, tmp);
 		free_2d_array(tmp);
 		execute_command(cur, &env);
@@ -92,7 +92,7 @@ int		main(int ac, char **av, char **env)
 	(void)av;
 	g_res = 1;
 	g_status = 0;
-	env_var = char_to_struct(env);
+	env_var = ch2str(env);
 	while (1)
 	{
 		signal(SIGINT, hello_sigint);
