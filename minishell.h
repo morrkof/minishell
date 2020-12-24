@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 16:16:49 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/24 16:26:49 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,5 +141,8 @@ char				*find_exec_path(t_args *arg, t_env **env);
 void				set_pipes(t_args *arg, t_pipe *pipes);
 void				unset_pipes(t_args *arg, t_pipe *pipes);
 void				add_red(char *s, t_local_vars *l, t_args *args, char *str);
+void				hello(void);
+void				hello_sigquit(int i);
+void				hello_sigint(int i);
 
 #endif

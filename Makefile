@@ -6,15 +6,15 @@
 #    By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#    Updated: 2020/12/24 14:07:41 by ppipes           ###   ########.fr        #
+#*   Updated: 2020/12/24 16:27:35 by miphigen         ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRC = minishell.c parser.c process_var.c execute.c env_unset.c \
-export.c free.c builtin.c env_utils.c get_path.c fork.c \
-export_alph_order.c parse_line.c add_red.c
+export.c free.c builtin.c env_utils.c get_path.c fork.c export_alph_order.c \
+parse_line.c add_red.c hello.c
 
 HEADER = ./minishell.h
 OBJ = $(SRC:.c=.o)

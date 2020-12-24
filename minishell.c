@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 14:12:28 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/24 16:35:17 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,39 +59,12 @@ char	**struct_to_char(t_env **src)
 	return (dest);
 }
 
-void	hello(void)
-{
-	char	*pwd;
-
-	write(1, "msh:", 4);
-	pwd = getcwd(NULL, 0);
-	write(1, pwd, ft_strlen(pwd));
-	write(1, "$ ", 2);
-	free(pwd);
-}
-
-void	hello_sigquit()
-{
-	write(1, "\b\b  \b\b", 6);
-	SIG_IGN;
-}
-
-void	hello_sigint()
-{
-	write(1, "\n", 1);
-	SIG_IGN;
-	g_res = 0;
-	free(g_line);
-	g_line = ft_strdup("");
-	hello();
-}
-
 int		main(int ac, char **av, char **env)
 {
 	t_args	args;
 	t_args	*cur;
 	t_env	**env_var;
-	char **tmp;
+	char	**tmp;
 
 	(void)ac;
 	(void)av;
@@ -113,9 +86,7 @@ int		main(int ac, char **av, char **env)
 			exit(0);
 		}
 		else if (g_res == 0 && ft_strlen(g_line) != 0)
-		{
 			continue;
-		}
 		parse_line(&args, g_line);
 		free(g_line);
 		cur = &args;

@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:08:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/24 16:08:10 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/24 16:10:24 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	if_non_q_state(t_args **args_ptr, char *s, t_local_vars *l)
 	{
 		l->red == 0 ? l->arg = add_arg(s, &l->i, &l->start, l->arg) :
 			add_red(s, l, args, NULL);
-		*args_ptr = add_command(args, l->c, &l->arg);//
+		*args_ptr = add_command(args, l->c, &l->arg);
 	}
 	else if ((ft_isspace(l->c) || l->c == '\n' || l->c == '\0'))
 		l->red == 0 ? l->arg = add_arg(s, &l->i, &l->start, l->arg) :

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miphigen <miphigen@student.21-school.ru    +#+  +:+       +#+        */
+/*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/23 10:53:47 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/23 10:56:35 by miphigen         ###   ########.fr       */
+/*   Created: 2020/12/24 16:37:44 by miphigen          #+#    #+#             */
+/*   Updated: 2020/12/24 16:44:58 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
