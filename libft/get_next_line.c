@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 14:49:29 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/21 15:43:47 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/21 18:37:56 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int			get_next_line(int fd, char **line)
 
 	result = 1;
 	if (!line)
-		return (0);
+		return (-1);
 	if ((buf = malloc(2)) == NULL)
 		return (-1);
 	if ((*line = malloc(1)) == NULL)

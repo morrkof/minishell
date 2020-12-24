@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/23 21:47:42 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/24 14:12:02 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,42 @@ int					g_status;
 int					g_res;
 char				*g_line;
 
+typedef	struct		s_red
+{
+	int				red;
+	char			*file;
+	struct s_red	*next;
+	struct s_red	*prev;
+}					t_red;
+
+typedef struct 		s_savefd
+{
+	t_red			*last0;
+	t_red			*last1;
+	int				redir0;
+	int				redir1;
+}					t_savefd;
+
+typedef struct 		s_pipe
+{
+	int				pipefd[2];
+	int				savefd0;
+	int				savefd1;
+}					t_pipe;
+
 typedef	struct		s_env
 {
 	char			*name;
 	char			*val;
 }					t_env;
 
-typedef	struct		s_red
-{
-	int				red;// > - 1;  >> - 2; < - 3; << - 4; 2> - 5
-	char			*file;
-	struct s_red	*next;
-	struct s_red	*prev;
-}					t_red;
-
 typedef struct		s_args
 {
 	char			**arg;
 	int				n_flag;
 	t_red			*red;
-	int				flag_out_pipe;// если пайп справа, то = 1
-	int				flag_in_pipe;// если пайп слева, то = 1
+	int				flag_out_pipe;
+	int				flag_in_pipe;
 	struct s_args	*next;
 	struct s_args	*prev;
 	int				sq_flag;
@@ -84,11 +99,16 @@ typedef struct		s_local_vars
 t_args				*parse_line(t_args *args, char *line);
 void				print_2d_char(char **array, char c);
 void				execute_command(t_args *args, t_env ***env);
+void				find_last_redirect(t_args *args, t_red **last0, t_red **last1);
+void				set_redirect(t_args *args, t_savefd *save);
+void				unset_redirect(t_savefd *save);
 t_env				*get_env(t_env **env, char *name);
 void				set_env(t_env ***env, char *name, char *val);
 char				**struct_to_char(t_env **src);
 t_env				**char_to_struct(char **src);
-char				*get_path(char *command, char *path);
+char				*get_path(char *command, char **paths);
+char				**split_paths(char *path);
+char				*add_current_path(char *path);
 void				process_variables(t_args *args, char **env_var2);
 void				msh_env(t_env **env);
 void				msh_unset(t_env **env, char **arr);
@@ -113,6 +133,14 @@ void				if_non_q_state(t_args *args, char *s, t_local_vars *l);
 void				if_red(t_args *args, char *s, t_local_vars *l);
 char				*msh_substr(char *s, unsigned int start, size_t len);
 t_red				*red_init(t_red *red);
-void    add_red(char *s, int *i, int *start, int *red, t_args *args);
+void				add_red(char *s, int *i, int *start, int *red, t_args *args);
+void				ft_cd(char **args, t_env **env);
+void				ft_pwd(void);
+void				ft_echo(char **args);
+void				print_errno_error(void);
+int					ft_fork(t_args *arg, t_env **env, int flag);
+char				*find_exec_path(t_args *arg, t_env **env);
+void				set_pipes(t_args *arg, t_pipe *pipes);
+void				unset_pipes(t_args *arg, t_pipe *pipes);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/23 21:51:39 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/24 14:12:28 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,26 +86,6 @@ void	hello_sigint()
 	hello();
 }
 
-t_env	**set_new_env(t_env **src, char *name, char *val)
-{
-	t_env	*tmp;
-	t_env	**copy;
-	int		i;
-
-	i = 0;
-	tmp = malloc(sizeof(t_env));
-	tmp->name = ft_strdup(name);
-	tmp->val = ft_strdup(val);
-	while (src[i] != NULL)
-		i++;
-	copy = malloc(sizeof(t_env *) * (i + 2));
-	copy = copy_env(copy, src);
-	copy[i] = tmp;
-	copy[i + 1] = NULL;
-	// free(src);
-	return (copy);
-}
-
 int		main(int ac, char **av, char **env)
 {
 	t_args	args;
@@ -127,6 +107,7 @@ int		main(int ac, char **av, char **env)
 		if (g_res == 0 && ft_strlen(g_line) == 0)
 		{
 			write(1, "\n", 1);
+			free_2d_env(env_var);
 			free(g_line);
 			free_args(&args);
 			exit(0);

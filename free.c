@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 23:44:02 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/21 14:45:14 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/22 00:31:21 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_2d_array(char **arr)
 	free(arr);
 }
 
-void	free_2d_env (t_env **env)
+void	free_2d_env(t_env **env)
 {
 	int i;
 
