@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:13:11 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/24 14:08:42 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/24 16:07:10 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	print_args(t_args *args)
 {
 	t_red	*red;
+	
 	while (args != NULL)
 	{
 		printf("\n%p\nflag_in_out = %d/%d\n", args, args->flag_in_pipe, args->flag_out_pipe);
@@ -33,7 +34,7 @@ void	print_args(t_args *args)
 void	print_2d_char(char **array, char c)
 {
 	puts("print_2d_char():");
-	
+
 	while (*array != NULL)
 	{
 		printf(">%s<%c", *array, c);
@@ -102,7 +103,6 @@ t_args	*add_command(t_args *args, char c, char ***arg)
 	if (c == '|')
 		args->flag_out_pipe = 1;
 	args->next = malloc(sizeof(t_args));
-	args->next->prev = args;
 	args_init(args->next);
 	args = args->next;
 	*arg = args->arg;
@@ -117,6 +117,5 @@ t_red	*red_init(t_red *red)
 	red->red = 0;
 	red->file = NULL;
 	red->next = NULL;
-	red->prev = NULL;
 	return (red);
 }

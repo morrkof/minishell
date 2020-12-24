@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:08:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/23 21:49:16 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/24 16:08:10 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_args	*parse_line(t_args *args, char *s)
 	l.red = 0;
 	l.start = 0;
 	while_loop(args, s, &l);
-	print_args(head);
+	//print_args(head);//
 	return (head);
 }
 
@@ -53,45 +53,47 @@ void	while_loop(t_args *args, char *s, t_local_vars *l)
 			l->state_p = NON_Q;
 		else if (l->state_p == NON_Q)
 		{
-			if_non_q_state(args, s, l);
+			if_non_q_state(&args, s, l);
 		}
 		if (l->c == '\0')
 			break ;
 	}
 }
 
-void    add_red(char *s, int *i, int *start, int *red, t_args *args)
+void	add_red(char *s, t_local_vars *l, t_args *args, char *str)
 {
-    char    *str;
-    t_red   *ptr;
+	t_red	*ptr;
 
-    if (!(str = msh_substr(s, *start, *i - *start)))
-    {
-        (*start)++;
-        return ;
-    }
-    *start = *i + 1;
-    if (args->red == NULL)
-    {
-        args->red = red_init(args->red);
-        ptr = args->red;
-    }
-    else
-    {
-        ptr = args->red;
-        while (ptr->next != NULL)
-            ptr = ptr->next;
-        ptr->next = red_init(ptr->next);
-        ptr = ptr->next;
-    }
-    ptr->red = *red;
-    ptr->file = ft_strtrim(str, " \t\r\n\f\v");
-    free(str);
-    *red = 0;
-}    
+	if (!(str = msh_substr(s, l->start, l->i - l->start)))
+	{
+		l->start++;
+		return ;
+	}
+	l->start = l->i + 1;
+	if (args->red == NULL)
+	{
+		args->red = red_init(args->red);
+		ptr = args->red;
+	}
+	else
+	{
+		ptr = args->red;
+		while (ptr->next != NULL)
+			ptr = ptr->next;
+		ptr->next = red_init(ptr->next);
+		ptr = ptr->next;
+	}
+	ptr->red = l->red;
+	ptr->file = ft_strtrim(str, " \t\r\n\f\v");
+	free(str);
+	l->red = 0;
+}
 
-void	if_non_q_state(t_args *args, char *s, t_local_vars *l)
+void	if_non_q_state(t_args **args_ptr, char *s, t_local_vars *l)
 {
+	t_args	*args;
+
+	args = *args_ptr;
 	if (l->c == '"')
 		l->state_p = DOUBLE_Q;
 	else if (l->c == '\'')
@@ -99,12 +101,12 @@ void	if_non_q_state(t_args *args, char *s, t_local_vars *l)
 	else if ((l->c == '|' || l->c == ';'))
 	{
 		l->red == 0 ? l->arg = add_arg(s, &l->i, &l->start, l->arg) :
-			add_red(s, &l->i, &l->start, &l->red, args);
-		args = add_command(args, l->c, &l->arg);
+			add_red(s, l, args, NULL);
+		*args_ptr = add_command(args, l->c, &l->arg);//
 	}
 	else if ((ft_isspace(l->c) || l->c == '\n' || l->c == '\0'))
 		l->red == 0 ? l->arg = add_arg(s, &l->i, &l->start, l->arg) :
-			add_red(s, &l->i, &l->start, &l->red, args);
+			add_red(s, l, args, NULL);
 	else if ((l->c == '<' || l->c == '>'))
 	{
 		if_red(args, s, l);
@@ -114,7 +116,7 @@ void	if_non_q_state(t_args *args, char *s, t_local_vars *l)
 void	if_red(t_args *args, char *s, t_local_vars *l)
 {
 	l->red == 0 ? l->arg = add_arg(s, &l->i, &l->start, l->arg) :
-		add_red(s, &l->i, &l->start, &l->red, args);
+		add_red(s, l, args, NULL);
 	if (l->c == '<' && s[l->i + 1] == '<')
 	{
 		l->red = 4;

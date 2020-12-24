@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 14:12:02 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/24 16:07:49 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef	struct		s_red
 	int				red;
 	char			*file;
 	struct s_red	*next;
-	struct s_red	*prev;
 }					t_red;
 
 typedef struct 		s_savefd
@@ -67,7 +66,6 @@ typedef struct		s_args
 	int				flag_out_pipe;
 	int				flag_in_pipe;
 	struct s_args	*next;
-	struct s_args	*prev;
 	int				sq_flag;
 }					t_args;
 
@@ -129,11 +127,10 @@ char				**add_arg(char *s, int *i, int *start, char **arr);
 t_args				*add_command(t_args *args, char c, char ***arg);
 void				print_args(t_args *args);
 void				while_loop(t_args *args, char *s, t_local_vars *var);
-void				if_non_q_state(t_args *args, char *s, t_local_vars *l);
+void				if_non_q_state(t_args **args_ptr, char *s, t_local_vars *l);
 void				if_red(t_args *args, char *s, t_local_vars *l);
 char				*msh_substr(char *s, unsigned int start, size_t len);
 t_red				*red_init(t_red *red);
-void				add_red(char *s, int *i, int *start, int *red, t_args *args);
 void				ft_cd(char **args, t_env **env);
 void				ft_pwd(void);
 void				ft_echo(char **args);
@@ -142,5 +139,6 @@ int					ft_fork(t_args *arg, t_env **env, int flag);
 char				*find_exec_path(t_args *arg, t_env **env);
 void				set_pipes(t_args *arg, t_pipe *pipes);
 void				unset_pipes(t_args *arg, t_pipe *pipes);
+void				add_red(char *s, t_local_vars *l, t_args *args, char *str);
 
 #endif
