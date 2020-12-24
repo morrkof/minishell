@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:08:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/23 16:21:44 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/23 21:49:16 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,83 +14,121 @@
 
 t_args	*parse_line(t_args *args, char *s)
 {
-	t_s_escape	state_e;
-	t_s_parser	state_p;
-	int			i;
-	int			start;
-	char		**arg;
-	char		c;
-	t_args		*head;
-	int			red;
+	t_local_vars	l;
+	t_args			*head;
 
 	head = args;
 	args_init(args);
 	if (ft_strchr(s, '\''))
 		args->sq_flag = 1;
-	arg = args->arg;
-	state_p = NON_Q;
-	state_e = NONESCAPED;
-	i = -1;
-	red = 0;
-	start = 0;
-	while (++i >= 0)
+	l.arg = args->arg;
+	l.state_p = NON_Q;
+	l.state_e = NONESCAPED;
+	l.i = -1;
+	l.red = 0;
+	l.start = 0;
+	while_loop(args, s, &l);
+	print_args(head);
+	return (head);
+}
+
+void	while_loop(t_args *args, char *s, t_local_vars *l)
+{
+	while (++l->i >= 0)
 	{
-		c = s[i];
-		if (state_e == NONESCAPED && c == '\\')
+		l->c = s[l->i];
+		if (l->state_e == NONESCAPED && l->c == '\\')
 		{
-			state_e = ESCAPED;
+			l->state_e = ESCAPED;
 			continue;
 		}
-		else if (state_e == ESCAPED)
+		else if (l->state_e == ESCAPED)
 		{
-			state_e = NONESCAPED;
+			l->state_e = NONESCAPED;
 			continue;
 		}
-		if (state_p == DOUBLE_Q && c == '\"')
-			state_p = NON_Q;
-		else if (state_p == SINGLE_Q && c == '\'')
-			state_p = NON_Q;
-		else if (state_p == NON_Q)
+		if (l->state_p == DOUBLE_Q && l->c == '\"')
+			l->state_p = NON_Q;
+		else if (l->state_p == SINGLE_Q && l->c == '\'')
+			l->state_p = NON_Q;
+		else if (l->state_p == NON_Q)
 		{
-			if (c == '"')
-				state_p = DOUBLE_Q;
-			else if (c == '\'')
-				state_p = SINGLE_Q;
-			else if ((c == '|' || c == ';'))
-			{
-				red == 0 ? arg = add_arg(s, &i, &start, arg) :
-					add_red(s, &i, &start, &red, args);
-				args = add_command(args, c, &arg);
-			}
-			else if ((ft_isspace(c) || c == '\n' || c == '\0'))
-				red == 0 ? arg = add_arg(s, &i, &start, arg) :
-					add_red(s, &i, &start, &red, args);
-			else if ((c == '<' || c == '>'))
-			{
-				red == 0 ? arg = add_arg(s, &i, &start, arg) :
-					add_red(s, &i, &start, &red, args);
-				if (c == '<' && s[i + 1] == '<')
-				{
-					red = 4;
-					i++;
-					start++;
-				}
-				else if (c == '>' && s[i + 1] == '>')
-				{
-					red = 2;
-					i++;
-					start++;
-				}
-				else if (c == '<')
-					red = 3;
-				else if (c == '>')
-					red = 1;
-			}
+			if_non_q_state(args, s, l);
 		}
-		if (c == '\0')
+		if (l->c == '\0')
 			break ;
 	}
-//	printf("line = >%s<\n", s);
-//	print_args(head);
-	return (head);
+}
+
+void    add_red(char *s, int *i, int *start, int *red, t_args *args)
+{
+    char    *str;
+    t_red   *ptr;
+
+    if (!(str = msh_substr(s, *start, *i - *start)))
+    {
+        (*start)++;
+        return ;
+    }
+    *start = *i + 1;
+    if (args->red == NULL)
+    {
+        args->red = red_init(args->red);
+        ptr = args->red;
+    }
+    else
+    {
+        ptr = args->red;
+        while (ptr->next != NULL)
+            ptr = ptr->next;
+        ptr->next = red_init(ptr->next);
+        ptr = ptr->next;
+    }
+    ptr->red = *red;
+    ptr->file = ft_strtrim(str, " \t\r\n\f\v");
+    free(str);
+    *red = 0;
+}    
+
+void	if_non_q_state(t_args *args, char *s, t_local_vars *l)
+{
+	if (l->c == '"')
+		l->state_p = DOUBLE_Q;
+	else if (l->c == '\'')
+		l->state_p = SINGLE_Q;
+	else if ((l->c == '|' || l->c == ';'))
+	{
+		l->red == 0 ? l->arg = add_arg(s, &l->i, &l->start, l->arg) :
+			add_red(s, &l->i, &l->start, &l->red, args);
+		args = add_command(args, l->c, &l->arg);
+	}
+	else if ((ft_isspace(l->c) || l->c == '\n' || l->c == '\0'))
+		l->red == 0 ? l->arg = add_arg(s, &l->i, &l->start, l->arg) :
+			add_red(s, &l->i, &l->start, &l->red, args);
+	else if ((l->c == '<' || l->c == '>'))
+	{
+		if_red(args, s, l);
+	}
+}
+
+void	if_red(t_args *args, char *s, t_local_vars *l)
+{
+	l->red == 0 ? l->arg = add_arg(s, &l->i, &l->start, l->arg) :
+		add_red(s, &l->i, &l->start, &l->red, args);
+	if (l->c == '<' && s[l->i + 1] == '<')
+	{
+		l->red = 4;
+		l->i++;
+		l->start++;
+	}
+	else if (l->c == '>' && s[l->i + 1] == '>')
+	{
+		l->red = 2;
+		l->i++;
+		l->start++;
+	}
+	else if (l->c == '<')
+		l->red = 3;
+	else if (l->c == '>')
+		l->red = 1;
 }

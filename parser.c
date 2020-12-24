@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:13:11 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/23 16:19:20 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/23 21:46:10 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,9 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	{
 		c = s[start];
 		if (c == '\\')
-		{
 			substr[i++] = s[++start];
-		}
 		else if (c != '\'' && c != '\"')
-		{
 			substr[i++] = c;
-		}
 		start++;
 	}
 	substr[i] = '\0';
@@ -123,34 +119,4 @@ t_red	*red_init(t_red *red)
 	red->next = NULL;
 	red->prev = NULL;
 	return (red);
-}
-
-void	add_red(char *s, int *i, int *start, int *red, t_args *args)
-{
-	char	*str;
-	t_red	*ptr;
-
-	if (!(str = msh_substr(s, *start, *i - *start)))
-	{
-		(*start)++;
-		return ;
-	}
-	*start = *i + 1;
-	if (args->red == NULL)
-	{
-		args->red = red_init(args->red);
-		ptr = args->red;
-	}
-	else
-	{
-		ptr = args->red;
-		while (ptr->next != NULL)
-			ptr = ptr->next;
-		ptr->next = red_init(ptr->next);
-		ptr = ptr->next;
-	}
-	ptr->red = *red;
-	ptr->file = ft_strtrim(str, " \t\r\n\f\v");
-	free(str);
-	*red = 0;
 }

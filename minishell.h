@@ -6,7 +6,7 @@
 /*   By: ppipes <student.21-school.ru>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/23 11:02:45 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/23 21:47:42 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,18 @@ typedef enum		e_sParser
 	NON_Q
 }					t_s_parser;
 
+typedef struct		s_local_vars
+{
+	t_s_escape		state_e;
+	t_s_parser		state_p;
+	int				i;
+	int				start;
+	char			**arg;
+	char			c;
+	int				red;
+
+}					t_local_vars;
+
 t_args				*parse_line(t_args *args, char *line);
 void				print_2d_char(char **array, char c);
 void				execute_command(t_args *args, t_env ***env);
@@ -92,5 +104,15 @@ void				free_red(t_red *red);
 void				free_args(t_args *args);
 int					ft_exit(t_env **env, t_args *args);
 void				env_alph_order(t_env **env);
+void				args_init(t_args *args);
+char				**add_arg(char *s, int *i, int *start, char **arr);
+t_args				*add_command(t_args *args, char c, char ***arg);
+void				print_args(t_args *args);
+void				while_loop(t_args *args, char *s, t_local_vars *var);
+void				if_non_q_state(t_args *args, char *s, t_local_vars *l);
+void				if_red(t_args *args, char *s, t_local_vars *l);
+char				*msh_substr(char *s, unsigned int start, size_t len);
+t_red				*red_init(t_red *red);
+void    add_red(char *s, int *i, int *start, int *red, t_args *args);
 
 #endif
