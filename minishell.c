@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/24 19:39:31 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/24 22:25:39 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,10 @@ void	interrupt(t_env **env)
 {
 	write(1, "\n", 1);
 	free_2d_env(env);
-	free(g_line);
 	exit(0);
 }
 
-void	command_list(t_env **env, t_args *args)
+void	command_list(t_env ***env, t_args *args)
 {
 	t_args	*cur;
 	char	**tmp;
@@ -75,10 +74,10 @@ void	command_list(t_env **env, t_args *args)
 	cur = args;
 	while (cur != NULL)
 	{
-		tmp = str2ch(env);
+		tmp = str2ch(*env);
 		process_variables(cur, tmp);
 		free_2d_array(tmp);
-		execute_command(cur, &env);
+		execute_command(cur, env);
 		cur = cur->next;
 	}
 }
@@ -105,7 +104,7 @@ int		main(int ac, char **av, char **env)
 			continue;
 		parse_line(&args, g_line);
 		free(g_line);
-		command_list(env_var, &args);
+		command_list(&env_var, &args);
 		free_args(&args);
 	}
 	free_2d_env(env_var);
