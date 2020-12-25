@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 02:03:15 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 13:12:57 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ t_env	**ch2str(char **src)
 	i = 0;
 	while (src[len])
 		len++;
-	dest = malloc(sizeof(t_env *) * (len + 1));
+	if (!(dest = malloc(sizeof(t_env *) * (len + 1))))
+		return (NULL);
 	while (i < len)
 	{
-		dest[i] = malloc(sizeof(t_env));
+		if (!(dest[i] = malloc(sizeof(t_env))))
+			return (NULL);
 		eq = ft_strchr(src[i], '=') - src[i];
 		dest[i]->name = ft_substr(src[i], 0, eq);
 		dest[i]->val = ft_substr(src[i], eq + 1, ft_strlen(src[i]) - eq);
@@ -43,7 +45,8 @@ char	**str2ch(t_env **src)
 	size_t	i;
 	size_t	j;
 
-	dest = malloc(sizeof(char *) * (arrlen(src) + 1));
+	if (!(dest = malloc(sizeof(char *) * (arrlen(src) + 1))))
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (src[i])

@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 01:13:49 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 13:10:31 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ t_env				**msh_export(t_env **env, char **arr);
 t_env				**copy_env(t_env **dst, t_env **src);
 t_env				*split_arg(char *s);
 t_env				**msh_export(t_env **env, char **arr);
-t_env				**set_new_env(t_env **src, char *name, char *val);
 void				free_t_env(t_env *env);
 void				free_2d_array(char **arr);
 void				free_2d_env (t_env **env);
