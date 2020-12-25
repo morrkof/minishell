@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/23 11:22:59 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/25 12:59:45 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ t_env	*split_arg(char *s)
 
 	start = ft_strchr(s, '=') - s;
 	env = malloc(sizeof(t_env));
+	if (env == NULL)
+		return (NULL);
 	env->name = ft_substr(s, 0, start);
 	start++;
 	env->val = ft_substr(s, start, ft_strlen(s) - start);
@@ -50,6 +52,8 @@ t_env	**add_var_to_list(int i, t_env **env, t_env *temp)
 	t_env	**copy;
 
 	copy = malloc(sizeof(t_env *) * (i + 2));
+	if (copy == NULL)
+		return (env);
 	copy = copy_env(copy, env);
 	copy[i] = temp;
 	free(env);
@@ -66,7 +70,8 @@ t_env	**msh_export(t_env **env, char **arr)
 		env_alph_order(env);
 		return (env);
 	}
-	temp = split_arg(arr[1]);
+	if ((temp = split_arg(arr[1])) == NULL)
+		return (env);
 	if (ft_strlen(temp->name) == 0 || ft_strlen(temp->val) == 0)
 		return (env);
 	i = -1;

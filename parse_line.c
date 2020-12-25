@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:08:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/25 12:46:47 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/25 13:10:55 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_args	*parse_line(t_args *args, char *s)
 
 	head = args;
 	args_init(args);
+	if (args->arg == NULL)
+		return (head);
 	if (ft_strchr(s, '\''))
 		args->sq_flag = 1;
 	l.arg = args->arg;

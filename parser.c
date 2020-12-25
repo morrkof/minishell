@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:13:11 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/25 12:46:37 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/25 13:10:57 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ t_args	*add_command(t_args *args, char c, char ***arg)
 	if (c == '|')
 		args->flag_out_pipe = 1;
 	args->next = malloc(sizeof(t_args));
+	if (args->next == NULL)
+		return (args);
 	args_init(args->next);
 	args = args->next;
 	*arg = args->arg;
@@ -83,6 +85,8 @@ t_args	*add_command(t_args *args, char c, char ***arg)
 t_red	*red_init(t_red *red)
 {
 	red = malloc(sizeof(t_red));
+	if (red == NULL)
+		return (NULL);
 	red->red = 0;
 	red->file = NULL;
 	red->next = NULL;

@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 11:00:18 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/23 11:05:55 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/25 13:11:17 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	env_alph_order(t_env **env)
 	while (env[i] != NULL)
 		i++;
 	copy = malloc(sizeof(t_env *) * (i + 1));
+	if (copy == NULL)
+		return ;
 	copy = copy_env_ptrs(copy, env);
 	sort(copy);
 	i = -1;
