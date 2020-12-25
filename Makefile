@@ -6,7 +6,7 @@
 #    By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#    Updated: 2020/12/25 13:37:11 by ppipes           ###   ########.fr        #
+#*   Updated: 2020/12/25 17:55:47 by miphigen         ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ parse_line.c hello.c
 
 HEADER = ./minishell.h
 OBJ = $(SRC:.c=.o)
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LIBFLAGS = -Llibft -lft
 LIBFT = ./libft/libft.a
 
