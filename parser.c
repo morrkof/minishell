@@ -6,42 +6,11 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:13:11 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/24 16:07:10 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/25 12:46:37 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_args(t_args *args)
-{
-	t_red	*red;
-	
-	while (args != NULL)
-	{
-		printf("\n%p\nflag_in_out = %d/%d\n", args, args->flag_in_pipe, args->flag_out_pipe);
-		print_2d_char(args->arg, ',');
-		red = args->red;
-		while (red != NULL)
-		{
-			printf("redirect: file = %s, type = %d\n", red->file, red->red);
-			red = red->next;
-		}
-		args = args->next;
-		puts("");
-	}
-}
-
-void	print_2d_char(char **array, char c)
-{
-	puts("print_2d_char():");
-
-	while (*array != NULL)
-	{
-		printf(">%s<%c", *array, c);
-		array++;
-	}
-	printf("\n");
-}
 
 void	args_init(t_args *args)
 {
