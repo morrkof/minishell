@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/25 12:59:45 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/25 19:08:38 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,19 @@ t_env	**add_var_to_list(int i, t_env **env, t_env *temp)
 	return (copy);
 }
 
+int		identifier_is_valid(char *s)
+{
+	char c;
+
+	c = s[0];
+	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_')
+		return (1);
+	write(1, "msh: export: `", 15);
+	write(1, s, ft_strlen(s));
+	write(1, "\': not a valid identifier\n", 26);
+	return (0);
+}
+
 t_env	**msh_export(t_env **env, char **arr)
 {
 	int		i;
@@ -73,6 +86,8 @@ t_env	**msh_export(t_env **env, char **arr)
 	if ((temp = split_arg(arr[1])) == NULL)
 		return (env);
 	if (ft_strlen(temp->name) == 0 || ft_strlen(temp->val) == 0)
+		return (env);
+	if ((identifier_is_valid(temp->name)) == 0)
 		return (env);
 	i = -1;
 	while (env[++i] != NULL)

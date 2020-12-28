@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:23:03 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 13:12:57 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 22:03:20 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	command_list(t_env ***env, t_args *args)
 	while (cur != NULL)
 	{
 		tmp = str2ch(*env);
-		process_variables(cur, tmp);
+		process_variables(cur, *env);
 		free_2d_array(tmp);
 		execute_command(cur, env);
 		cur = cur->next;

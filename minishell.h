@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 13:10:31 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/25 21:49:43 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ t_env				**ch2str(char **src);
 char				*get_path(char *command, char **paths);
 char				**split_paths(char *path);
 char				*add_current_path(char *path);
-void				process_variables(t_args *args, char **env_var2);
+void				process_variables(t_args *args, t_env **env);
 void				msh_env(t_env **env);
 void				msh_unset(t_env **env, char **arr);
 t_env				**msh_export(t_env **env, char **arr);
