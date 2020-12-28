@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 23:44:02 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 01:13:02 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/29 01:40:53 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,11 @@ void	free_args(t_args *args)
 		free(cur);
 		cur = next;
 	}
+}
+
+void	free_t_env(t_env *env)
+{
+	free(env->name);
+	free(env->val);
+	free(env);
 }

@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/28 22:09:58 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/29 01:58:58 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,5 +145,7 @@ void				hello_sigquit(int i);
 void				hello_sigint(int i);
 int					arrlen(t_env **src);
 int					check_args(t_args *args);
+int					check_arr(t_env **env, char **arr);
+int					check_exist(t_env **env, t_env *temp);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/28 20:00:00 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/29 02:02:02 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,6 @@ t_env	*split_arg(char *s)
 	return (env);
 }
 
-void	free_t_env(t_env *env)
-{
-	free(env->name);
-	free(env->val);
-	free(env);
-}
-
 t_env	**add_var_to_list(int i, t_env **env, t_env *temp)
 {
 	t_env	**copy;
@@ -81,27 +74,17 @@ t_env	**msh_export(t_env **env, char **arr)
 	int		j;
 	t_env	*temp;
 
-	if (arr[1] == NULL)
-	{
-		env_alph_order(env);
+	if (check_arr(env, arr))
 		return (env);
-	}
 	j = 1;
 	while ((temp = split_arg(arr[j])) != NULL)
 	{
-		if (ft_strlen(temp->name) == 0 || ft_strlen(temp->val) == 0)
+		if (!(ft_strlen(temp->name)) || !(ft_strlen(temp->val)))
 			return (env);
-		if ((identifier_is_valid(temp->name)) == 0)
+		if (!(identifier_is_valid(temp->name)))
 			return (env);
-		i = -1;
-		while (env[++i] != NULL)
-		{
-			if (env[i]->name != NULL && ft_strcmp(env[i]->name, temp->name) == 0)
-			{
-				env[i]->val = ft_strdup(temp->val);
-				return (env);
-			}
-		}
+		if ((i = check_exist(env, temp)) == 0)
+			return (env);
 		env = add_var_to_list(i, env, temp);
 		j++;
 	}

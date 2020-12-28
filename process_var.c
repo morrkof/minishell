@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 16:37:44 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/28 22:06:16 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/29 01:25:06 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*replace_all_variables(char *s, t_env **env)
 	i = -1;
 	while (s[++i] != '\0')
 	{
-		if (s[i] == '$')
+		if (s[i] == '$' && s[i + 1] != '?')
 		{
 			s = replace_var(s, i, env);
 			i = 0;

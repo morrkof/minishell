@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_synth_error.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:09:16 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/28 22:09:31 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/29 01:32:29 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,3 @@ int		check_args(t_args *args)
 	}
 	return (1);
 }
-

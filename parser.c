@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:13:11 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/25 18:13:14 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/29 01:36:23 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	char	c;
 	size_t	j;
 
-	if (len == 0)
-		return (NULL);
-	if (!(substr = (char *)malloc(len + 1)))
+	if (len == 0 || !(substr = (char *)malloc(len + 1)))
 		return (NULL);
 	i = 0;
 	j = 0;
@@ -41,7 +39,7 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 	{
 		c = s[start];
 		if (c == '\\')
-		{	
+		{
 			substr[++i] = s[++start];
 			--len;
 		}

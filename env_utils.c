@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 13:39:01 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 13:09:57 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/29 02:01:17 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,30 @@ void	set_env(t_env ***env, char *name, char *val)
 		free(tmp->val);
 		tmp->val = ft_strdup(val);
 	}
+}
+
+int		check_arr(t_env **env, char **arr)
+{
+	if (arr[1] == NULL)
+	{
+		env_alph_order(env);
+		return (1);
+	}
+	return (0);
+}
+
+int		check_exist(t_env **env, t_env *temp)
+{
+	int	i;
+
+	i = -1;
+	while (env[++i] != NULL)
+	{
+		if (env[i]->name != NULL && !(ft_strcmp(env[i]->name, temp->name)))
+		{
+			env[i]->val = ft_strdup(temp->val);
+			return (0);
+		}
+	}
+	return (i);
 }
