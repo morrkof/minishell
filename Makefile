@@ -6,7 +6,7 @@
 #    By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#*   Updated: 2020/12/25 17:55:47 by miphigen         ###   ########.fr       *#
+#*   Updated: 2020/12/28 22:10:16 by miphigen         ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 SRC = minishell.c parser.c process_var.c execute.c env_unset.c \
 export.c free.c builtin.c env_utils.c get_path.c fork.c export_alph_order.c \
-parse_line.c hello.c
+parse_line.c hello.c check_synth_error.c
 
 HEADER = ./minishell.h
 OBJ = $(SRC:.c=.o)

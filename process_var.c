@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 16:37:44 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/28 20:29:40 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/28 22:06:16 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	*get_value(char *str, t_env **env)
 	i = -1;
 	while (str[++i] != '\0' && str[i] != '$')
 		s[i] = str[i];
-
 	i = -1;
 	while (env[++i] != NULL)
 	{
@@ -78,7 +77,6 @@ char	*replace_all_variables(char *s, t_env **env)
 		}
 	}
 	return (s);
-
 }
 
 void	process_variables(t_args *args, t_env **env)

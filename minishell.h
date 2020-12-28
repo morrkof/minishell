@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 21:49:43 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/28 22:09:58 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,5 +144,6 @@ void				hello(void);
 void				hello_sigquit(int i);
 void				hello_sigint(int i);
 int					arrlen(t_env **src);
+int					check_args(t_args *args);
 
 #endif

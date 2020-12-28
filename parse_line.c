@@ -6,62 +6,11 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:08:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/28 21:32:39 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/28 22:10:40 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_2d_char(char **array, char c)//
-{
-	puts("print_2d_char():");
-
-	while (*array != NULL)
-	{
-		printf(">%s<%c ", *array, c);
-		array++;
-	}
-	printf("\n");
-}
-
-void	print_args(t_args *args)//
-{
-	t_red	*red;
-	
-	while (args != NULL)
-	{
-		printf("\n%p\nflag_in_out = %d/%d\n", args, args->flag_in_pipe, args->flag_out_pipe);
-		print_2d_char(args->arg, ',');
-		red = args->red;
-		while (red != NULL)
-		{
-			printf("redirect: file = %s, type = %d\n", red->file, red->red);
-			red = red->next;
-		}
-		args = args->next;
-		puts("");
-	}
-}
-
-int		check_args(t_args *args)//
-{
-	t_red	*red;
-	
-	while (args != NULL)
-	{
-		if (args->arg[0] == NULL && args->next != NULL)
-			return (0);
-		red = args->red;
-		while (red != NULL)
-		{
-			if (red != NULL && red->file[0] == '\0')
-				return (0);
-			red = red->next;
-		}
-		args = args->next;
-	}
-	return (1);
-}
 
 t_args	*parse_line(t_args *args, char *s)
 {
@@ -81,7 +30,6 @@ t_args	*parse_line(t_args *args, char *s)
 	l.red = 0;
 	l.start = 0;
 	while_loop(args, s, &l);
-	//print_args(head);//
 	if (check_args(head) == 0)
 		write(1, "bash: syntax error near unexpected token\n", 41);
 	return (head);
