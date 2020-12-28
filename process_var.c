@@ -6,15 +6,21 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 16:37:44 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/28 16:56:11 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/28 20:29:40 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_value(char *s, t_env **env)
+char	*get_value(char *str, t_env **env)
 {
 	int		i;
+	char	*s;
+
+	s = malloc(100);
+	i = -1;
+	while (str[++i] != '\0' && str[i] != '$')
+		s[i] = str[i];
 
 	i = -1;
 	while (env[++i] != NULL)
@@ -22,6 +28,7 @@ char	*get_value(char *s, t_env **env)
 		if (env[i]->name != NULL && ft_strcmp(env[i]->name, s) == 0)
 			return (env[i]->val);
 	}
+	free(s);
 	return (NULL);
 }
 
@@ -40,21 +47,19 @@ char	*replace_var(char *s, int i, t_env **env)
 	char	*s2;
 	char	*ret_value;
 	int		s2_length;
+	int		name_length;
 
 	s2 = get_value(&s[i + 1], env);
 	if (s2 == NULL)
-	{	
 		s2 = "";
-		s2_length = get_length(s, i);
-	}
-	else
-		s2_length = ft_strlen(s2);
+	name_length = get_length(s + 1, i);
+	s2_length = ft_strlen(s2);
 	ret_value = malloc(ft_strlen(s2) + ft_strlen(s) + 1);
 	ft_memcpy(ret_value, s, i);
 	ft_memcpy(&ret_value[i], s2, s2_length);
 	ret_value[i + s2_length] = '\0';
-	ft_strlcat(&ret_value[i + ft_strlen(s2)], &s[i + s2_length],
-		ft_strlen(s) - i);
+	ft_strlcat(ret_value, &s[i + name_length + 1], ft_strlen(ret_value) +
+		ft_strlen(&s[i + name_length]));
 	free(s);
 	return (ret_value);
 }
@@ -71,7 +76,6 @@ char	*replace_all_variables(char *s, t_env **env)
 			s = replace_var(s, i, env);
 			i = 0;
 		}
-
 	}
 	return (s);
 
