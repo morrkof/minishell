@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/22 16:52:36 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/25 13:33:34 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/27 23:07:47 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,25 @@ void	ft_echo(char **args)
 
 int		ft_exit(t_env **env, t_args *args)
 {
+	int	i;
+
+	i = 0;
 	if (args->arg[1] != NULL)
+	{
+		while (args->arg[1][i] != '\0')
+		{
+			if (!(ft_isdigit(args->arg[1][i])))
+			{
+				write(2, args->arg[0], ft_strlen(args->arg[0]));
+				write(2, ": ", 3);
+				write(2, args->arg[1], ft_strlen(args->arg[1]));
+				write(2, ": numeric argument required\n", 29);
+				exit(2);
+			}
+			i++;
+		}
 		g_status = ft_atoi(args->arg[1]);
+	}
 	else
 		g_status = 0;
 	free_2d_env(env);
