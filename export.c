@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 22:42:08 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/25 19:08:38 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/28 20:00:00 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ t_env	*split_arg(char *s)
 	t_env	*env;
 	int		start;
 
+	if (s == NULL)
+		return (NULL);
 	start = ft_strchr(s, '=') - s;
 	env = malloc(sizeof(t_env));
 	if (env == NULL)
@@ -76,6 +78,7 @@ int		identifier_is_valid(char *s)
 t_env	**msh_export(t_env **env, char **arr)
 {
 	int		i;
+	int		j;
 	t_env	*temp;
 
 	if (arr[1] == NULL)
@@ -83,21 +86,25 @@ t_env	**msh_export(t_env **env, char **arr)
 		env_alph_order(env);
 		return (env);
 	}
-	if ((temp = split_arg(arr[1])) == NULL)
-		return (env);
-	if (ft_strlen(temp->name) == 0 || ft_strlen(temp->val) == 0)
-		return (env);
-	if ((identifier_is_valid(temp->name)) == 0)
-		return (env);
-	i = -1;
-	while (env[++i] != NULL)
+	j = 1;
+	while ((temp = split_arg(arr[j])) != NULL)
 	{
-		if (env[i]->name != NULL && ft_strcmp(env[i]->name, temp->name) == 0)
-		{
-			env[i]->val = ft_strdup(temp->val);
+		if (ft_strlen(temp->name) == 0 || ft_strlen(temp->val) == 0)
 			return (env);
+		if ((identifier_is_valid(temp->name)) == 0)
+			return (env);
+		i = -1;
+		while (env[++i] != NULL)
+		{
+			if (env[i]->name != NULL && ft_strcmp(env[i]->name, temp->name) == 0)
+			{
+				env[i]->val = ft_strdup(temp->val);
+				return (env);
+			}
 		}
+		env = add_var_to_list(i, env, temp);
+		j++;
 	}
 	g_status = 0;
-	return (add_var_to_list(i, env, temp));
+	return (env);
 }
