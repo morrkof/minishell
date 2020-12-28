@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:08:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/25 21:35:14 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/28 21:32:39 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,27 @@ void	print_args(t_args *args)//
 		puts("");
 	}
 }
+
+int		check_args(t_args *args)//
+{
+	t_red	*red;
+	
+	while (args != NULL)
+	{
+		if (args->arg[0] == NULL && args->next != NULL)
+			return (0);
+		red = args->red;
+		while (red != NULL)
+		{
+			if (red != NULL && red->file[0] == '\0')
+				return (0);
+			red = red->next;
+		}
+		args = args->next;
+	}
+	return (1);
+}
+
 t_args	*parse_line(t_args *args, char *s)
 {
 	t_local_vars	l;
@@ -61,6 +82,8 @@ t_args	*parse_line(t_args *args, char *s)
 	l.start = 0;
 	while_loop(args, s, &l);
 	//print_args(head);//
+	if (check_args(head) == 0)
+		write(1, "bash: syntax error near unexpected token\n", 41);
 	return (head);
 }
 
