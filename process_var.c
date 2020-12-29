@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 16:37:44 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/29 13:40:35 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/29 13:57:39 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*replace_all_variables(char *s, t_env **env)
 		if (s[i] == '$' && s[i + 1] != '?')
 		{
 			s = replace_var(s, i, env);
-			i = 0;
+			i = -1;
 		}
 	}
 	return (s);

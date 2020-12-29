@@ -6,7 +6,7 @@
 #    By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/03 16:22:35 by ppipes            #+#    #+#              #
-#*   Updated: 2020/12/28 22:10:16 by miphigen         ###   ########.fr       *#
+#    Updated: 2020/12/29 13:58:47 by ppipes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ parse_line.c hello.c check_synth_error.c
 
 HEADER = ./minishell.h
 OBJ = $(SRC:.c=.o)
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 LIBFLAGS = -Llibft -lft
 LIBFT = ./libft/libft.a
 
