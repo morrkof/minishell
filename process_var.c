@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 16:37:44 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/29 01:25:06 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/29 13:40:35 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_value(char *str, t_env **env)
 	int		i;
 	char	*s;
 
-	s = malloc(100);
+	s = ft_calloc(100, 1);
 	i = -1;
 	while (str[++i] != '\0' && str[i] != '$')
 		s[i] = str[i];

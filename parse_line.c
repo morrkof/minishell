@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
+/*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:08:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/29 12:32:05 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/29 12:36:03 by ppipes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_args	*parse_line(t_args *args, char *s)
 	l.red = 0;
 	l.start = 0;
 	while_loop(args, s, &l);
-	print_args(head);
 	if (check_args(head) == 0)
 		write(1, "bash: syntax error near unexpected token\n", 41);
 	return (head);
