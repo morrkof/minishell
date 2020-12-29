@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:13:11 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/29 01:36:23 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/29 11:05:36 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,8 @@ void	args_init(t_args *args)
 	args->sq_flag = 0;
 }
 
-char	*msh_substr(char *s, unsigned int start, size_t len)
+char	*msh_substr(char *s, unsigned int start, size_t len, char *substr)
 {
-	char	*substr;
 	size_t	i;
 	char	c;
 	size_t	j;
@@ -35,13 +34,13 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (j++ < len && s[start] != '\0')
+	while (j++ <= len && s[start] != '\0')
 	{
 		c = s[start];
 		if (c == '\\')
 		{
-			substr[++i] = s[++start];
-			--len;
+			substr[i++] = s[++start];
+			len--;
 		}
 		else if (c != '\'' && c != '\"')
 			substr[i++] = c;
@@ -56,7 +55,7 @@ char	*msh_substr(char *s, unsigned int start, size_t len)
 
 char	**add_arg(char *s, int *i, int *start, char **arr)
 {
-	*arr = msh_substr(s, *start, *i - *start);
+	*arr = msh_substr(s, *start, *i - *start, NULL);
 	if (*arr != NULL)
 	{
 		arr++;

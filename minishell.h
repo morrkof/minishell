@@ -6,7 +6,7 @@
 /*   By: ppipes <ppipes@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:22:41 by ppipes            #+#    #+#             */
-/*   Updated: 2020/12/29 01:58:58 by ppipes           ###   ########.fr       */
+/*   Updated: 2020/12/29 10:33:13 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void				print_args(t_args *args);
 void				while_loop(t_args *args, char *s, t_local_vars *var);
 void				if_non_q_state(t_args **args_ptr, char *s, t_local_vars *l);
 void				if_red(t_args *args, char *s, t_local_vars *l);
-char				*msh_substr(char *s, unsigned int start, size_t len);
+char				*msh_substr(char *s, unsigned int start, size_t len, char *substr);
 t_red				*red_init(t_red *red);
 void				ft_cd(char **args, t_env **env);
 void				ft_pwd(void);

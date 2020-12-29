@@ -6,7 +6,7 @@
 /*   By: miphigen <miphigen@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 16:08:52 by miphigen          #+#    #+#             */
-/*   Updated: 2020/12/28 22:10:40 by miphigen         ###   ########.fr       */
+/*   Updated: 2020/12/29 11:07:46 by miphigen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	add_red(char *s, t_local_vars *l, t_args *args, char *str)
 {
 	t_red	*ptr;
 
-	if (!(str = msh_substr(s, l->start, l->i - l->start)))
+	if (!(str = msh_substr(s, l->start, l->i - l->start, NULL)))
 	{
 		l->start++;
 		return ;
